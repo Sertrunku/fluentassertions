@@ -11,7 +11,7 @@ namespace FluentAssertions
 #if !__IOS__ && !ANDROID
             Services.Configuration = new Configuration(new AppSettingsConfigurationStore());
 #endif
-            Services.TestFramework = TestFrameworkProvider.TestFramework;
+            Services.ThrowException = TestFrameworkProvider.Throw;
             Services.Reflector = new DefaultReflector();
 
             Formatter.AddFormatter(new AggregateExceptionValueFormatter());

@@ -594,7 +594,7 @@ namespace FluentAssertions.Specs
         #region HaveRoot
 
         [TestMethod]
-        public void When_asserting_document_has_root_element_and_it_does_it_should_succeed()
+        public void When_asserting_document_has_root_element_and_it_does_it_should_succeed_and_return_it_for_chaining()
         {
             //-------------------------------------------------------------------------------------------------------------------
             // Arrange
@@ -607,13 +607,12 @@ namespace FluentAssertions.Specs
             //-------------------------------------------------------------------------------------------------------------------
             // Act
             //-------------------------------------------------------------------------------------------------------------------
-            Action act = () =>
-                document.Should().HaveRoot("parent");
+            XElement root = document.Should().HaveRoot("parent").Which;
 
             //-------------------------------------------------------------------------------------------------------------------
             // Assert
             //-------------------------------------------------------------------------------------------------------------------
-            act.ShouldNotThrow();
+            root.Should().BeSameAs(document.Root);
         }
 
         [TestMethod]
@@ -630,8 +629,7 @@ namespace FluentAssertions.Specs
             //-------------------------------------------------------------------------------------------------------------------
             // Act
             //-------------------------------------------------------------------------------------------------------------------
-            Action act = () =>
-                document.Should().HaveRoot("unknown");
+            Action act = () => document.Should().HaveRoot("unknown");
 
             //-------------------------------------------------------------------------------------------------------------------
             // Assert
@@ -664,6 +662,49 @@ namespace FluentAssertions.Specs
                     ", but found {0}.", Formatter.ToString(document));
 
             act.ShouldThrow<AssertFailedException>().WithMessage(expectedMessage);
+        }
+
+        [TestMethod]
+        public void When_asserting_a_null_document_has_root_element_it_should_fail()
+        {
+            //-------------------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-------------------------------------------------------------------------------------------------------------------
+            XDocument document = null;
+
+            //-------------------------------------------------------------------------------------------------------------------
+            // Act
+            //-------------------------------------------------------------------------------------------------------------------
+            Action act = () => document.Should().HaveRoot("unknown");
+
+            //-------------------------------------------------------------------------------------------------------------------
+            // Assert
+            //-------------------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<ArgumentNullException>().WithMessage(
+                "Cannot assert the document has a root element if the document itself is <null>*");
+        }
+        
+        [TestMethod]
+        public void When_asserting_a_document_has_a_null_root_element_it_should_fail()
+        {
+            //-------------------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-------------------------------------------------------------------------------------------------------------------
+            var document = XDocument.Parse(
+                @"<parent>
+                    <child />
+                  </parent>");
+
+            //-------------------------------------------------------------------------------------------------------------------
+            // Act
+            //-------------------------------------------------------------------------------------------------------------------
+            Action act = () => document.Should().HaveRoot(null);
+
+            //-------------------------------------------------------------------------------------------------------------------
+            // Assert
+            //-------------------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<ArgumentNullException>().WithMessage(
+                "Cannot assert the document has a root element if the element name is <null>*");
         }
 
         [TestMethod]
@@ -743,7 +784,7 @@ namespace FluentAssertions.Specs
         #region HaveElement
 
         [TestMethod]
-        public void When_asserting_document_has_root_with_child_element_and_it_does_it_should_succeed()
+        public void When_document_has_the_expected_child_element_it_should_not_throw_and_return_the_element_for_chaining()
         {
             //-------------------------------------------------------------------------------------------------------------------
             // Arrange
@@ -756,13 +797,12 @@ namespace FluentAssertions.Specs
             //-------------------------------------------------------------------------------------------------------------------
             // Act
             //-------------------------------------------------------------------------------------------------------------------
-            Action act = () =>
-                document.Should().HaveElement("child");
+            XElement element = document.Should().HaveElement("child").Which;
 
             //-------------------------------------------------------------------------------------------------------------------
             // Assert
             //-------------------------------------------------------------------------------------------------------------------
-            act.ShouldNotThrow();
+            element.Should().BeSameAs(document.Element("parent").Element("child"));
         }
 
         [TestMethod]
@@ -903,14 +943,56 @@ namespace FluentAssertions.Specs
             //-------------------------------------------------------------------------------------------------------------------
             // Act
             //-------------------------------------------------------------------------------------------------------------------
-            var matchedElement = document.Should().HaveElement("child").Which;
+            XElement matchedElement = document.Should().HaveElement("child").Which;
 
             //-------------------------------------------------------------------------------------------------------------------
             // Assert
             //-------------------------------------------------------------------------------------------------------------------
-            matchedElement.Should().BeOfType<XElement>()
-                .And.HaveAttribute("attr", "1");
+            matchedElement.Should().BeOfType<XElement>().And.HaveAttribute("attr", "1");
             matchedElement.Name.Should().Be(XName.Get("child"));
+        }
+
+        [TestMethod]
+        public void When_asserting_a_null_document_has_an_element_it_should_fail()
+        {
+            //-------------------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-------------------------------------------------------------------------------------------------------------------
+            XDocument document = null;
+
+            //-------------------------------------------------------------------------------------------------------------------
+            // Act
+            //-------------------------------------------------------------------------------------------------------------------
+            Action act = () => document.Should().HaveElement("unknown");
+
+            //-------------------------------------------------------------------------------------------------------------------
+            // Assert
+            //-------------------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<ArgumentNullException>().WithMessage(
+                "Cannot assert the document has an element if the document itself is <null>*");
+        }
+
+        [TestMethod]
+        public void When_asserting_a_document_has_a_null_element_it_should_fail()
+        {
+            //-------------------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-------------------------------------------------------------------------------------------------------------------
+            var document = XDocument.Parse(
+                @"<parent>
+                    <child />
+                  </parent>");
+
+            //-------------------------------------------------------------------------------------------------------------------
+            // Act
+            //-------------------------------------------------------------------------------------------------------------------
+            Action act = () => document.Should().HaveElement(null);
+
+            //-------------------------------------------------------------------------------------------------------------------
+            // Assert
+            //-------------------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<ArgumentNullException>().WithMessage(
+                "Cannot assert the document has an element if the element name is <null>*");
         }
 
         #endregion

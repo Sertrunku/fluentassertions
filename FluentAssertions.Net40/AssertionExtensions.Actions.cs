@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
+using FluentAssertions.Common;
 using FluentAssertions.Specialized;
 
 namespace FluentAssertions
@@ -18,7 +20,7 @@ namespace FluentAssertions
         /// <typeparam name="TException">
         /// The type of the exception it should throw.
         /// </typeparam>
-        /// <param name="reason">
+        /// <param name="because">
         /// A formatted phrase explaining why the assertion should be satisfied. If the phrase does not 
         /// start with the word <i>because</i>, it is prepended to the message.
         /// </param>
@@ -28,11 +30,11 @@ namespace FluentAssertions
         /// <returns>
         /// Returns an object that allows asserting additional members of the thrown exception.
         /// </returns>
-        public static ExceptionAssertions<TException> ShouldThrow<TException>(this Action action, string reason = "",
+        public static ExceptionAssertions<TException> ShouldThrow<TException>(this Action action, string because = "",
             params object[] reasonArgs)
             where TException : Exception
         {
-            return new ActionAssertions(action, extractor).ShouldThrow<TException>(reason, reasonArgs);
+            return new ActionAssertions(action, extractor).ShouldThrow<TException>(because, reasonArgs);
         }
 
         /// <summary>
@@ -42,33 +44,33 @@ namespace FluentAssertions
         /// <typeparam name="TException">
         /// The type of the exception it should not throw. Any other exceptions are ignored and will satisfy the assertion.
         /// </typeparam>
-        /// <param name="reason">
+        /// <param name="because">
         /// A formatted phrase explaining why the assertion should be satisfied. If the phrase does not 
         /// start with the word <i>because</i>, it is prepended to the message.
         /// </param>
         /// <param name="reasonArgs">
         /// Zero or more values to use for filling in any <see cref="string.Format(string,object[])"/> compatible placeholders.
         /// </param>
-        public static void ShouldNotThrow<TException>(this Action action, string reason = "", params object[] reasonArgs)
+        public static void ShouldNotThrow<TException>(this Action action, string because = "", params object[] reasonArgs)
             where TException : Exception
         {
-            new ActionAssertions(action, extractor).ShouldNotThrow<TException>(reason, reasonArgs);
+            new ActionAssertions(action, extractor).ShouldNotThrow<TException>(because, reasonArgs);
         }
 
         /// <summary>
         /// Asserts that the <paramref name="action"/> does not throw any exception at all.
         /// </summary>
         /// <param name="action">The current method or property.</param>
-        /// <param name="reason">
+        /// <param name="because">
         /// A formatted phrase explaining why the assertion should be satisfied. If the phrase does not 
         /// start with the word <i>because</i>, it is prepended to the message.
         /// </param>
         /// <param name="reasonArgs">
         /// Zero or more values to use for filling in any <see cref="string.Format(string,object[])"/> compatible placeholders.
         /// </param>
-        public static void ShouldNotThrow(this Action action, string reason = "", params object[] reasonArgs)
+        public static void ShouldNotThrow(this Action action, string because = "", params object[] reasonArgs)
         {
-            new ActionAssertions(action, extractor).ShouldNotThrow(reason, reasonArgs);
+            new ActionAssertions(action, extractor).ShouldNotThrow(because, reasonArgs);
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace FluentAssertions
         /// <typeparam name="TException">
         /// The type of the exception it should throw.
         /// </typeparam>
-        /// <param name="reason">
+        /// <param name="because">
         /// A formatted phrase explaining why the assertion should be satisfied. If the phrase does not 
         /// start with the word <i>because</i>, it is prepended to the message.
         /// </param>
@@ -88,11 +90,11 @@ namespace FluentAssertions
         /// <returns>
         /// Returns an object that allows asserting additional members of the thrown exception.
         /// </returns>
-        public static ExceptionAssertions<TException> ShouldThrow<TException>(this Func<Task> asyncAction, string reason = "",
+        public static ExceptionAssertions<TException> ShouldThrow<TException>(this Func<Task> asyncAction, string because = "",
             params object[] reasonArgs)
             where TException : Exception
         {
-            return new AsyncFunctionAssertions(asyncAction, extractor).ShouldThrow<TException>(reason, reasonArgs);
+            return new AsyncFunctionAssertions(asyncAction, extractor).ShouldThrow<TException>(because, reasonArgs);
         }
 
         /// <summary>
@@ -102,37 +104,50 @@ namespace FluentAssertions
         /// <typeparam name="TException">
         /// The type of the exception it should not throw. Any other exceptions are ignored and will satisfy the assertion.
         /// </typeparam>
-        /// <param name="reason">
+        /// <param name="because">
         /// A formatted phrase explaining why the assertion should be satisfied. If the phrase does not 
         /// start with the word <i>because</i>, it is prepended to the message.
         /// </param>
         /// <param name="reasonArgs">
         /// Zero or more values to use for filling in any <see cref="string.Format(string,object[])"/> compatible placeholders.
         /// </param>
-        public static void ShouldNotThrow<TException>(this Func<Task> asyncAction, string reason = "", params object[] reasonArgs)
+        public static void ShouldNotThrow<TException>(this Func<Task> asyncAction, string because = "", params object[] reasonArgs)
         {
-            new AsyncFunctionAssertions(asyncAction, extractor).ShouldNotThrow<TException>(reason, reasonArgs);
+            new AsyncFunctionAssertions(asyncAction, extractor).ShouldNotThrow<TException>(because, reasonArgs);
         }
 
         /// <summary>
         /// Asserts that the <paramref name="asyncAction"/> does not throw any exception at all.
         /// </summary>
         /// <param name="asyncAction">The current method or property.</param>
-        /// <param name="reason">
+        /// <param name="because">
         /// A formatted phrase explaining why the assertion should be satisfied. If the phrase does not 
         /// start with the word <i>because</i>, it is prepended to the message.
         /// </param>
         /// <param name="reasonArgs">
         /// Zero or more values to use for filling in any <see cref="string.Format(string,object[])"/> compatible placeholders.
         /// </param>
-        public static void ShouldNotThrow(this Func<Task> asyncAction, string reason = "", params object[] reasonArgs)
+        public static void ShouldNotThrow(this Func<Task> asyncAction, string because = "", params object[] reasonArgs)
         {
-            new AsyncFunctionAssertions(asyncAction, extractor).ShouldNotThrow(reason, reasonArgs);
+            new AsyncFunctionAssertions(asyncAction, extractor).ShouldNotThrow(because, reasonArgs);
         }
 
         private class AggregateExceptionExtractor : IExtractExceptions
         {
             public IEnumerable<T> OfType<T>(Exception actualException) where T : Exception
+            {
+                if (typeof(T).IsSameOrInherits(typeof(AggregateException)))
+                {
+                    var exception = actualException as T;
+
+                    return (exception == null) ? Enumerable.Empty<T>() : new[] { exception };
+                }
+
+                return GetExtractedExceptions<T>(actualException);
+            }
+
+            private static List<T> GetExtractedExceptions<T>(Exception actualException)
+                where T : Exception
             {
                 var exceptions = new List<T>();
 
