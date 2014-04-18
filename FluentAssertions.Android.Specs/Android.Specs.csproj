@@ -188,9 +188,9 @@
     <Content Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FluentAssertions.Android\FluentAssertions.Android.csproj">
+    <ProjectReference Include="..\FluentAssertions.Android\Android.csproj">
       <Project>{F2AA2B81-431F-4F5C-A662-BC75358BE5CC}</Project>
-      <Name>FluentAssertions.Android</Name>
+      <Name>Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\FluentAssertions.Core\Core.csproj">
       <Project>{8931c5ef-3bac-473a-a343-57791d0917b1}</Project>

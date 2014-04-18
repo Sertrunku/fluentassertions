@@ -16,13 +16,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{2D1C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Specs", "Specs", "{963262D0-9FD5-4741-8C0E-E2F34F110EF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertions.iOS", "FluentAssertions.iOS\FluentAssertions.iOS.csproj", "{841FCCCF-6284-4868-96EE-23A92DBFD8F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOS", "FluentAssertions.iOS\iOS.csproj", "{841FCCCF-6284-4868-96EE-23A92DBFD8F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertions.Android", "FluentAssertions.Android\FluentAssertions.Android.csproj", "{F2AA2B81-431F-4F5C-A662-BC75358BE5CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android", "FluentAssertions.Android\Android.csproj", "{F2AA2B81-431F-4F5C-A662-BC75358BE5CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertions.iOS.Specs", "FluentAssertions.iOS.Specs\FluentAssertions.iOS.Specs.csproj", "{E8568E2D-EB6E-4742-90A8-671AC91F94BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOS.Specs", "FluentAssertions.iOS.Specs\iOS.Specs.csproj", "{E8568E2D-EB6E-4742-90A8-671AC91F94BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertions.Android.Specs", "FluentAssertions.Android.Specs\FluentAssertions.Android.Specs.csproj", "{A85244E8-3C0F-4017-ABC6-A341A2F04D40}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android.Specs", "FluentAssertions.Android.Specs\Android.Specs.csproj", "{A85244E8-3C0F-4017-ABC6-A341A2F04D40}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "FluentAssertions.Core\Core.csproj", "{8931C5EF-3BAC-473A-A343-57791D0917B1}"
 EndProject
