@@ -51,6 +51,9 @@
     <AssemblyOriginatorKeyFile>..\FluentAssertions.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\packages\FluentAssertions.3.0.90\lib\portable-net40+sl5+win8+wp8\FluentAssertions.Core.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib">
       <Aliases>global, mscorlib</Aliases>
     </Reference>
@@ -181,6 +184,7 @@
     <None Include="..\FluentAssertions.snk">
       <Link>FluentAssertions.snk</Link>
     </None>
+    <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
@@ -194,10 +198,6 @@
     <ProjectReference Include="..\FluentAssertions.Android\Android.csproj">
       <Project>{F2AA2B81-431F-4F5C-A662-BC75358BE5CC}</Project>
       <Name>Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FluentAssertions.Core\Core.csproj">
-      <Project>{8931c5ef-3bac-473a-a343-57791d0917b1}</Project>
-      <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
