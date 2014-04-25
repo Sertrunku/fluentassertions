@@ -190,7 +190,7 @@ namespace FluentAssertions.Specs
         }
     }
 
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class DummyMethodAttribute : Attribute
     {
         public bool Filter { get; set; }
