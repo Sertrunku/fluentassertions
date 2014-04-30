@@ -210,9 +210,9 @@
     <BundleResource Include="Resources\Default-568h@2x.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions.Core, Version=3.0.9999.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentAssertions.3.0.9999\lib\portable-monotouch+monoandroid\FluentAssertions.Core.dll</HintPath>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\packages\FluentAssertions.3.0.107\lib\portable-monotouch+monoandroid\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="MonoTouch.NUnitLite" />
     <Reference Include="System.Xml.Linq" />

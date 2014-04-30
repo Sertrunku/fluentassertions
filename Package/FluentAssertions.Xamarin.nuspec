@@ -24,7 +24,7 @@
     </releaseNotes>
     <dependencies>
       <group>
-        <dependency id="FluentAssertions" version="3.0.90" />
+        <dependency id="FluentAssertions" version="3.0.107" />
       </group>
     </dependencies>
   </metadata>
