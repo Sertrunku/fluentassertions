@@ -53,6 +53,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\FluentAssertions.Android\Execution\XUnitTestFramework.cs">
+      <Link>Execution\XUnitTestFramework.cs</Link>
+    </Compile>
     <Compile Include="..\FluentAssertions.Net40\AssertionExtensions.Actions.cs">
       <Link>AssertionExtensions.Actions.cs</Link>
     </Compile>

@@ -3,11 +3,11 @@
   <metadata> 
     <id>FluentAssertions.Xamarin</id>
     <title>Fluent Assertions for Xamarin</title>
-    <version>3.0</version>
+    <version>3.0.1</version>
     <owners>onovotny</owners>
     <authors>Oren Novotny, Dennis Doomen, Martin Opdam</authors>
     <summary>
-      Fluent methods for asserting the result of TDD/BDD specs for Xamarin projects. Supports the unit test frameworks NUnit and NUnitLite.
+      Fluent methods for asserting the result of TDD/BDD specs for Xamarin projects. Supports the unit test frameworks xUnit, NUnit and NUnitLite.
     </summary>
     <description>
       A very extensive set of extension methods that allow you to more naturally specify the expected outcome of a TDD or 

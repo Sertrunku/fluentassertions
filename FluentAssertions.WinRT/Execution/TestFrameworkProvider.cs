@@ -14,7 +14,8 @@ namespace FluentAssertions.Execution
 #if !__IOS__ && !ANDROID
             { "mstest", new MSTestFramework() }
 #elif __IOS__ || ANDROID
-            {"nunit-lite", new NUnitLiteTestFramework()}
+            {"nunit-lite", new NUnitLiteTestFramework()},
+            {"xUnit2", new XUnit2TestFramework()}
 #endif
         };
 

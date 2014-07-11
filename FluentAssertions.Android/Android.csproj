@@ -94,6 +94,7 @@
       <Link>SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="Execution\NUnitLiteTestFramework.cs" />
+    <Compile Include="Execution\XUnitTestFramework.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
