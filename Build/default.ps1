@@ -19,15 +19,18 @@ task Clean {
 }
 
 task ApplyAssemblyVersioning {
-    TeamCity-Block "Updating assembly version with build number $BuildNumber" {   
+    TeamCity-Block "Updating solution info versions with build number $BuildNumber" {   
 	
-		$fullName = "$BaseDirectory\SolutionInfo.cs"
+		$infos = Get-ChildItem -Path $BaseDirectory -Filter SolutionInfo.cs -Recurse
+		
+		foreach ($info in $infos) {
+		    Write-Host "Updating " + $info.FullName
+			Set-ItemProperty -Path $info.FullName -Name IsReadOnly -Value $false
 
-	    Set-ItemProperty -Path $fullName -Name IsReadOnly -Value $false
-
-	    $content = Get-Content $fullName
-	    $content = $content -replace '"(\d+)\.(\d+)\.(\d+)"', ('"$1.$2.' + $BuildNumber + '"')
-	    Set-Content -Path $fullName $content
+		    $content = Get-Content $info.FullName
+		    $content = $content -replace '"(\d+)\.(\d+)\.(\d+)"', ('"$1.$2.' + $BuildNumber + '"')
+		    Set-Content -Path $info.FullName $content
+		}	
 	}
 }
 
@@ -53,7 +56,7 @@ task Compile {
             $logger = "/logger:JetBrains.BuildServer.MSBuildLoggers.MSBuildLogger," + $MsBuildLoggerPath
         }
             
-	    exec { msbuild /v:q /p:Platform="Any CPU" $SlnFile /p:Configuration=Release /t:Rebuild $logger}
+	    exec { msbuild /v:d /p:Platform="Any CPU" $SlnFile /p:Configuration=Release /t:Rebuild $logger}
     }
 }
 
@@ -92,7 +95,7 @@ task BuildPackage {
 	}
 }
 
-task PublishToMyget -precondition { return ($Branch -eq "master" -or $Branch -eq "<default>") -and ($ApiKey -ne "") } {
+task PublishToMyget -precondition { return ($Branch -eq "master" -or $Branch -eq "<default>" -or $Branch -eq "v3.1") -and ($ApiKey -ne "") } {
     TeamCity-Block "Publishing NuGet Package to Myget" {  
 		$packages = Get-ChildItem $PackageDirectory *.nupkg
 		foreach ($package in $packages) {

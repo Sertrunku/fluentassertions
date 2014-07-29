@@ -26,6 +26,8 @@ namespace FluentAssertions.Android.Specs
 		
 		public static void UpdateIdValues()
 		{
+			global::FluentAssertions.Resource.String.ApplicationName = global::FluentAssertions.Android.Specs.Resource.String.ApplicationName;
+			global::FluentAssertions.Resource.String.Hello = global::FluentAssertions.Android.Specs.Resource.String.Hello;
 			global::Xamarin.Android.NUnitLite.Resource.Id.OptionHostName = global::FluentAssertions.Android.Specs.Resource.Id.OptionHostName;
 			global::Xamarin.Android.NUnitLite.Resource.Id.OptionPort = global::FluentAssertions.Android.Specs.Resource.Id.OptionPort;
 			global::Xamarin.Android.NUnitLite.Resource.Id.OptionRemoteServer = global::FluentAssertions.Android.Specs.Resource.Id.OptionRemoteServer;
@@ -33,6 +35,7 @@ namespace FluentAssertions.Android.Specs
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultFullName = global::FluentAssertions.Android.Specs.Resource.Id.ResultFullName;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultMessage = global::FluentAssertions.Android.Specs.Resource.Id.ResultMessage;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultResultState = global::FluentAssertions.Android.Specs.Resource.Id.ResultResultState;
+			global::Xamarin.Android.NUnitLite.Resource.Id.ResultRunSingleMethodTest = global::FluentAssertions.Android.Specs.Resource.Id.ResultRunSingleMethodTest;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultStackTrace = global::FluentAssertions.Android.Specs.Resource.Id.ResultStackTrace;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsFailed = global::FluentAssertions.Android.Specs.Resource.Id.ResultsFailed;
 			global::Xamarin.Android.NUnitLite.Resource.Id.ResultsId = global::FluentAssertions.Android.Specs.Resource.Id.ResultsId;
@@ -47,8 +50,6 @@ namespace FluentAssertions.Android.Specs
 			global::Xamarin.Android.NUnitLite.Resource.Layout.results = global::FluentAssertions.Android.Specs.Resource.Layout.results;
 			global::Xamarin.Android.NUnitLite.Resource.Layout.test_result = global::FluentAssertions.Android.Specs.Resource.Layout.test_result;
 			global::Xamarin.Android.NUnitLite.Resource.Layout.test_suite = global::FluentAssertions.Android.Specs.Resource.Layout.test_suite;
-			global::FluentAssertions.Resource.String.ApplicationName = global::FluentAssertions.Android.Specs.Resource.String.ApplicationName;
-			global::FluentAssertions.Resource.String.Hello = global::FluentAssertions.Android.Specs.Resource.String.Hello;
 		}
 		
 		public partial class Attribute
@@ -92,20 +93,23 @@ namespace FluentAssertions.Android.Specs
 			// aapt resource value: 0x7f050000
 			public const int OptionRemoteServer = 2131034112;
 			
-			// aapt resource value: 0x7f05000f
-			public const int OptionsButton = 2131034127;
-			
-			// aapt resource value: 0x7f05000a
-			public const int ResultFullName = 2131034122;
-			
-			// aapt resource value: 0x7f05000c
-			public const int ResultMessage = 2131034124;
+			// aapt resource value: 0x7f050010
+			public const int OptionsButton = 2131034128;
 			
 			// aapt resource value: 0x7f05000b
-			public const int ResultResultState = 2131034123;
+			public const int ResultFullName = 2131034123;
 			
 			// aapt resource value: 0x7f05000d
-			public const int ResultStackTrace = 2131034125;
+			public const int ResultMessage = 2131034125;
+			
+			// aapt resource value: 0x7f05000c
+			public const int ResultResultState = 2131034124;
+			
+			// aapt resource value: 0x7f05000a
+			public const int ResultRunSingleMethodTest = 2131034122;
+			
+			// aapt resource value: 0x7f05000e
+			public const int ResultStackTrace = 2131034126;
 			
 			// aapt resource value: 0x7f050006
 			public const int ResultsFailed = 2131034118;
@@ -128,11 +132,11 @@ namespace FluentAssertions.Android.Specs
 			// aapt resource value: 0x7f050004
 			public const int ResultsResult = 2131034116;
 			
-			// aapt resource value: 0x7f05000e
-			public const int RunTestsButton = 2131034126;
+			// aapt resource value: 0x7f05000f
+			public const int RunTestsButton = 2131034127;
 			
-			// aapt resource value: 0x7f050010
-			public const int TestSuiteListView = 2131034128;
+			// aapt resource value: 0x7f050011
+			public const int TestSuiteListView = 2131034129;
 			
 			static Id()
 			{

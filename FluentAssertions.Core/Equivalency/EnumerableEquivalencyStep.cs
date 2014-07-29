@@ -1,3 +1,5 @@
+using System;
+
 using System.Collections;
 using System.Linq;
 
@@ -5,14 +7,28 @@ using FluentAssertions.Execution;
 
 namespace FluentAssertions.Equivalency
 {
-    public class EnumerableEquivalencyStep : IEquivalencyStep
+    internal class EnumerableEquivalencyStep : IEquivalencyStep
     {
         /// <summary>
         /// Gets a value indicating whether this step can handle the verificationScope subject and/or expectation.
         /// </summary>
         public bool CanHandle(EquivalencyValidationContext context, IEquivalencyAssertionOptions config)
         {
-            return IsCollection(context.Subject);
+            Type subjectType = GetSubjectType(context, config);
+
+            return IsCollection(subjectType);
+        }
+
+        internal static Type GetSubjectType(EquivalencyValidationContext context, IEquivalencyAssertionOptions config)
+        {
+            bool useRuntimeType = ShouldUseRuntimeType(config);
+
+            return useRuntimeType ? context.RuntimeType : context.CompileTimeType;
+        }
+
+        private static bool ShouldUseRuntimeType(IEquivalencyAssertionOptions config)
+        {
+            return config.SelectionRules.Any(selectionRule => selectionRule is AllRuntimePublicPropertiesSelectionRule);
         }
 
         /// <summary>
@@ -44,16 +60,16 @@ namespace FluentAssertions.Equivalency
         private static bool AssertExpectationIsCollection(object expectation)
         {
             return AssertionScope.Current
-                .ForCondition(IsCollection(expectation))
+                .ForCondition(IsCollection(expectation.GetType()))
                 .FailWith("{context:Subject} is a collection and cannot be compared with a non-collection type.");
         }
 
-        private static bool IsCollection(object value)
+        private static bool IsCollection(Type type)
         {
-            return (!(value is string) && (value is IEnumerable));
+            return !typeof(string).IsAssignableFrom(type) && typeof(IEnumerable).IsAssignableFrom(type);
         }
 
-        private object[] ToArray(object value)
+        internal static object[] ToArray(object value)
         {
             return ((IEnumerable)value).Cast<object>().ToArray();
         }
