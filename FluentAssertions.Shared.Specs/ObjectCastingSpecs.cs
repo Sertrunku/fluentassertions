@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-#if !OLD_MSTEST
+#if !OLD_MSTEST && !NUNIT
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #elif NUNIT
 using TestClassAttribute = NUnit.Framework.TestFixtureAttribute;

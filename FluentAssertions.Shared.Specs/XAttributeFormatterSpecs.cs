@@ -2,7 +2,7 @@ using System.Xml.Linq;
 
 using FluentAssertions.Formatting;
 
-#if !OLD_MSTEST
+#if !OLD_MSTEST && !NUNIT
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #elif NUNIT
 using TestClassAttribute = NUnit.Framework.TestFixtureAttribute;

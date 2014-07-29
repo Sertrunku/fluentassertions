@@ -16,7 +16,6 @@ namespace FluentAssertions.Execution
             { "mstest", new MSTestFramework() }
 #elif __IOS__ || ANDROID
             {"nunit-lite", new NUnitLiteTestFramework()},
-            {"xUnit2", new XUnit2TestFramework()}
 #endif
         };
 

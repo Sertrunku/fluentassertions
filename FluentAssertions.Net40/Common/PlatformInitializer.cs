@@ -7,7 +7,9 @@ namespace FluentAssertions.Common
     {
         public void Initialize()
         {
+#if !__IOS__ && !ANDROID
             Services.Configuration = new Configuration(new AppSettingsConfigurationStore());
+#endif
             Services.ThrowException = TestFrameworkProvider.Throw;
             Services.Reflector = new DefaultReflector();
 

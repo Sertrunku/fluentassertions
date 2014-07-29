@@ -8,7 +8,7 @@ using Internal.Main.Test;
 using Internal.Other.Test;
 using Internal.Other.Test.Common;
 
-#if !OLD_MSTEST
+#if !OLD_MSTEST && !NUNIT
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #elif NUNIT
 using TestClassAttribute = NUnit.Framework.TestFixtureAttribute;

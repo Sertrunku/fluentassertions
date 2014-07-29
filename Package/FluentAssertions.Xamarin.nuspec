@@ -3,7 +3,7 @@
   <metadata> 
     <id>FluentAssertions.Xamarin</id>
     <title>Fluent Assertions for Xamarin</title>
-    <version>3.0.1</version>
+    <version>3.1.227</version>
     <owners>onovotny</owners>
     <authors>Oren Novotny, Dennis Doomen, Martin Opdam</authors>
     <summary>
@@ -24,19 +24,19 @@
     </releaseNotes>
     <dependencies>
       <group>
-        <dependency id="FluentAssertions" version="3.0.107" />
+        <dependency id="FluentAssertions" version="3.1.227" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <!-- MonoAndroid -->
-    <file src="lib\monoandroid\FluentAssertions.Android.dll" target="lib\monoandroid\FluentAssertions.Android.dll" />
-    <file src="lib\monoandroid\FluentAssertions.Android.pdb" target="lib\monoandroid\FluentAssertions.Android.pdb" />
-    <file src="lib\monoandroid\FluentAssertions.Android.xml" target="lib\monoandroid\FluentAssertions.Android.xml" />
+    <file src="lib\monoandroid\FluentAssertions.dll" target="lib\monoandroid\FluentAssertions.dll" />
+    <file src="lib\monoandroid\FluentAssertions.pdb" target="lib\monoandroid\FluentAssertions.pdb" />
+    <file src="lib\monoandroid\FluentAssertions.xml" target="lib\monoandroid\FluentAssertions.xml" />
 
     <!-- MonoTouch -->
-    <file src="lib\monotouch\FluentAssertions.iOS.dll" target="lib\monotouch\FluentAssertions.iOS.dll" />
-    <file src="lib\monotouch\FluentAssertions.iOS.pdb" target="lib\monotouch\FluentAssertions.iOS.pdb" />
-    <file src="lib\monotouch\FluentAssertions.iOS.xml" target="lib\monotouch\FluentAssertions.iOS.xml" />
+    <file src="lib\monotouch\FluentAssertions.dll" target="lib\monotouch\FluentAssertions.dll" />
+    <file src="lib\monotouch\FluentAssertions.pdb" target="lib\monotouch\FluentAssertions.pdb" />
+    <file src="lib\monotouch\FluentAssertions.xml" target="lib\monotouch\FluentAssertions.xml" />
   </files>
 </package>
