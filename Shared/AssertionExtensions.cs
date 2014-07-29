@@ -551,7 +551,7 @@ namespace FluentAssertions
                 reasonArgs);
         }
 
-#if !SILVERLIGHT && !WINRT && !PORTABLE && !__IOS__
+#if !SILVERLIGHT && !WINRT && !PORTABLE && !__IOS__ &&!ANDROID
         /// <summary>
         ///   Starts monitoring an object for its events.
         /// </summary>

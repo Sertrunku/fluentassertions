@@ -1,5 +1,5 @@
 
-#if !WINRT && !PORTABLE && !__IOS__ 
+#if !WINRT && !PORTABLE && !__IOS__  && !ANDROID
 using System;
 using System.Reflection;
 using System.Reflection.Emit;
