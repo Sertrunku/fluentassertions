@@ -3,7 +3,7 @@
   <metadata> 
     <id>FluentAssertions.Xamarin</id>
     <title>Fluent Assertions for Xamarin</title>
-    <version>3.1.227</version>
+    <version>3.1.229</version>
     <owners>onovotny</owners>
     <authors>Oren Novotny, Dennis Doomen, Martin Opdam</authors>
     <summary>
@@ -24,7 +24,7 @@
     </releaseNotes>
     <dependencies>
       <group>
-        <dependency id="FluentAssertions" version="3.1.227" />
+        <dependency id="FluentAssertions" version="3.1.229" />
       </group>
     </dependencies>
   </metadata>
