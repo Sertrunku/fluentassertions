@@ -28,11 +28,9 @@ namespace FluentAssertions.Net45.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            Action action = () =>
-            {
-                Func<Task> asyncFunction = async () => { await asyncObject.ThrowAsync<ArgumentException>(); };
-                asyncFunction.ShouldThrow<ArgumentException>();
-            };
+            Action action = () => asyncObject
+                .Awaiting(async x => await x.ThrowAsync<ArgumentException>())
+                .ShouldThrow<ArgumentException>();
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert
@@ -51,11 +49,9 @@ namespace FluentAssertions.Net45.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            Action action = () =>
-            {
-                Func<Task> asyncFunction = async () => { await asyncObject.SucceedAsync(); };
-                asyncFunction.ShouldThrow<InvalidOperationException>();
-            };
+            Action action = () => asyncObject
+                .Awaiting(async x => await x.SucceedAsync())
+                .ShouldThrow<InvalidOperationException>();
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert
@@ -75,11 +71,9 @@ namespace FluentAssertions.Net45.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            Action action = () =>
-            {
-                Func<Task> asyncFunction = async () => { await asyncObject.ThrowAsync<ArgumentException>(); };
-                asyncFunction.ShouldThrow<InvalidOperationException>();
-            };
+            Action action = () => asyncObject
+                .Awaiting(async x => await x.ThrowAsync<ArgumentException>())
+                .ShouldThrow<InvalidOperationException>();
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert
@@ -99,11 +93,9 @@ namespace FluentAssertions.Net45.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            Action action = () =>
-            {
-                Func<Task> asyncFunction = async () => { await asyncObject.SucceedAsync(); };
-                asyncFunction.ShouldNotThrow();
-            };
+            Action action = () => asyncObject
+                .Awaiting(async x => await x.SucceedAsync())
+                .ShouldNotThrow();
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert
@@ -122,11 +114,9 @@ namespace FluentAssertions.Net45.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            Action action = () =>
-            {
-                Func<Task> asyncFunction = async () => { await asyncObject.ThrowAsync<ArgumentException>(); };
-                asyncFunction.ShouldNotThrow();
-            };
+            Action action = () => asyncObject
+                .Awaiting(async x => await x.ThrowAsync<ArgumentException>())
+                .ShouldNotThrow();
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert
@@ -146,11 +136,9 @@ namespace FluentAssertions.Net45.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            Action action = () =>
-            {
-                Func<Task> asyncFunction = async () => { await asyncObject.ThrowAsync<ArgumentException>(); };
-                asyncFunction.ShouldNotThrow<InvalidOperationException>();
-            };
+            Action action = () => asyncObject
+                .Awaiting(async x => await x.ThrowAsync<ArgumentException>())
+                .ShouldNotThrow<InvalidOperationException>();
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert
@@ -169,11 +157,9 @@ namespace FluentAssertions.Net45.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            Action action = () =>
-            {
-                Func<Task> asyncFunction = async () => { await asyncObject.SucceedAsync(); };
-                asyncFunction.ShouldNotThrow<InvalidOperationException>();
-            };
+            Action action = () => asyncObject
+                .Awaiting(async x => await asyncObject.SucceedAsync())
+                .ShouldNotThrow<InvalidOperationException>();
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert
@@ -192,11 +178,9 @@ namespace FluentAssertions.Net45.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            Action action = () =>
-            {
-                Func<Task> asyncFunction = async () => { await asyncObject.ThrowAsync<ArgumentException>(); };
-                asyncFunction.ShouldNotThrow<ArgumentException>();
-            };
+            Action action = () => asyncObject
+                .Awaiting(async x => await x.ThrowAsync<ArgumentException>())
+                .ShouldNotThrow<ArgumentException>();
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert

@@ -156,4 +156,6 @@ $RECYCLE.BIN/
 .DS_Store
 Package/Lib
 *.nupkg
+*.zip
 packages/*
+*.ide

@@ -2,17 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.Serialization;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 
 using FluentAssertions.Equivalency;
-using FluentAssertions.Execution;
-
 #if !OLD_MSTEST && !NUNIT
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #elif NUNIT
@@ -179,6 +173,39 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
+        public void When_a_predicate_for_properties_to_include_has_been_specified_it_should_ignore_the_other_properties()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-----------------------------------------------------------------------------------------------------------
+            var subject = new
+            {
+                Age = 36,
+                Birthdate = new DateTime(1973, 9, 20),
+                Name = "John"
+            };
+
+            var customer = new
+            {
+                Age = 36,
+                Birthdate = new DateTime(1973, 9, 20),
+                Name = "Dennis"
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act 
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => subject.ShouldBeEquivalentTo(customer, options => options
+                .Including(info => info.PropertyPath.EndsWith("Age"))
+                .Including(info => info.PropertyPath.EndsWith("Birthdate")));
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Assert
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldNotThrow();
+        }
+
+        [TestMethod]
         public void When_a_non_property_expression_is_provided_it_should_throw()
         {
             //-----------------------------------------------------------------------------------------------------------
@@ -209,7 +236,7 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            Action act = () => dto.ShouldBeEquivalentTo(dto, options => options.Including(null));
+            Action act = () => dto.ShouldBeEquivalentTo(dto, options => options.Including((Expression<Func<CustomerDto, object>>)null));
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert
@@ -544,6 +571,34 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             action.ShouldNotThrow();
         }
+
+        [TestMethod]
+        public void When_a_reference_to_an_explicit_interface_impl_is_provided_it_should_only_include_those_properties()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-----------------------------------------------------------------------------------------------------------
+            IVehicle expected = new ExplicitCar
+            {
+                Wheels = 4
+            };
+
+            IVehicle subject = new ExplicitCar
+            {
+                Wheels = 99999
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action action = () => subject.ShouldBeEquivalentTo(expected);
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Assert
+            //-----------------------------------------------------------------------------------------------------------
+            action.ShouldNotThrow();
+        }
+
 
         [TestMethod]
         public void When_a_deeply_nested_property_with_a_value_mismatch_is_excluded_it_should_not_throw()
@@ -2061,9 +2116,9 @@ namespace FluentAssertions.Specs
 
         internal class ExcludeForeignKeysSelectionRule : ISelectionRule
         {
-            public IEnumerable<PropertyInfo> SelectProperties(IEnumerable<PropertyInfo> properties, ISubjectInfo context)
+            public IEnumerable<PropertyInfo> SelectProperties(IEnumerable<PropertyInfo> selectedProperties, ISubjectInfo context)
             {
-                return properties.Where(pi => !pi.Name.EndsWith("Id")).ToArray();
+                return selectedProperties.Where(pi => !pi.Name.EndsWith("Id")).ToArray();
             }
         }
 
@@ -2238,7 +2293,7 @@ namespace FluentAssertions.Specs
         #region Memberless Objects
 
         [TestMethod]
-        public void When_asserting_instances_of_an_anonymous_type_having_no_members_are_equivalent_it_should_pass()
+        public void When_asserting_instances_of_an_anonymous_type_having_no_members_are_equivalent_it_should_fail()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange / Act
@@ -2252,7 +2307,7 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
-        public void When_asserting_instances_of_a_class_having_no_members_are_equivalent_it_should_pass()
+        public void When_asserting_instances_of_a_class_having_no_members_are_equivalent_it_should_fail()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange / Act
@@ -2266,7 +2321,7 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
-        public void When_asserting_instances_of_a_struct_having_no_memebers_are_equivilent_it_should_pass()
+        public void When_asserting_instances_of_a_struct_having_no_memebers_are_equivilent_it_should_fail()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange / Act
@@ -2280,7 +2335,7 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
-        public void When_asserting_instances_of_Object_are_equivalent_it_should_pass()
+        public void When_asserting_instances_of_Object_are_equivalent_it_should_fail()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange / Act
@@ -2293,7 +2348,29 @@ namespace FluentAssertions.Specs
             act.ShouldThrow<InvalidOperationException>();
         }
 
+
+        [TestMethod]
+        public void When_asserting_instances_of_arrays_of_types_in_System_are_equivalent_it_should_respect_the_declared_type()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            object actual = new int[0];
+            object expectation = new int[0];
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => actual.ShouldBeEquivalentTo(expectation);
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Assert
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<InvalidOperationException>();
+        }
+
         #endregion
+
 
         public class ClassOne
         {
@@ -4444,9 +4521,22 @@ namespace FluentAssertions.Specs
         public int Wheels { get; set; }
     }
 
+    public class ExplicitCar : ExplicitVehicle, ICar
+    {
+        public int Wheels { get; set; }
+    }
+
     public class Vehicle : IVehicle
     {
         public int VehicleId { get; set; }
+    }
+
+    public class ExplicitVehicle : IVehicle
+    {
+        int IVehicle.VehicleId
+        {
+            get; set; 
+        }
     }
 
     public interface ICar : IVehicle

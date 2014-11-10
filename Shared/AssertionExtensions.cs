@@ -40,16 +40,23 @@ namespace FluentAssertions
             return () => action(subject);
         }
 
+#if NET45 || WINRT
+        public static Func<Task> Awaiting<T>(this T subject, Func<T, Task> action)
+        {
+            return () => action(subject);
+        }
+#endif
+
 #if !SILVERLIGHT && !PORTABLE
 
-        /// <summary>
-        /// Provides methods for asserting the execution time of a method or property.
-        /// </summary>
-        /// <param name="subject">The object that exposes the method or property.</param>
-        /// <param name="action">A reference to the method or property to measure the execution time of.</param>
-        /// <returns>
-        /// Returns an object for asserting that the execution time matches certain conditions.
-        /// </returns>
+    /// <summary>
+    /// Provides methods for asserting the execution time of a method or property.
+    /// </summary>
+    /// <param name="subject">The object that exposes the method or property.</param>
+    /// <param name="action">A reference to the method or property to measure the execution time of.</param>
+    /// <returns>
+    /// Returns an object for asserting that the execution time matches certain conditions.
+    /// </returns>
         public static MemberExecutionTimeAssertions<T> ExecutionTimeOf<T>(this T subject, Expression<Action<T>> action)
         {
             return new MemberExecutionTimeAssertions<T>(subject, action);
@@ -472,7 +479,7 @@ namespace FluentAssertions
         {
             return new PropertyInfoSelectorAssertions(propertyInfoSelector.ToArray());
         }
-        
+
         /// <summary>
         /// Asserts that an object is equivalent to another object. 
         /// </summary>
@@ -543,7 +550,7 @@ namespace FluentAssertions
         public static void ShouldAllBeEquivalentTo<T>(this IEnumerable<T> subject, IEnumerable expectation,
             Func<EquivalencyAssertionOptions<T>, EquivalencyAssertionOptions<T>> config, string because = "",
             params object[] reasonArgs)
-            {
+        {
             subject.ShouldBeEquivalentTo<IEnumerable<T>>(
                 expectation,
                 c => c.ForCollectionMemberType<T, IEnumerable<T>>(config),
@@ -552,10 +559,10 @@ namespace FluentAssertions
         }
 
 #if !SILVERLIGHT && !WINRT && !PORTABLE && !__IOS__ &&!ANDROID
-        /// <summary>
-        ///   Starts monitoring an object for its events.
-        /// </summary>
-        /// <exception cref = "ArgumentNullException">Thrown if eventSource is Null.</exception>
+    /// <summary>
+    ///   Starts monitoring an object for its events.
+    /// </summary>
+    /// <exception cref = "ArgumentNullException">Thrown if eventSource is Null.</exception>
         public static void MonitorEvents(this object eventSource)
         {
             EventMonitor.AddRecordersFor(eventSource, BuildRecorders);
@@ -595,7 +602,7 @@ namespace FluentAssertions
         {
             EventMonitor.AddRecordersFor(eventSource, source => BuildRecorders((INotifyPropertyChanged)source));
         }
-        
+
         private static EventRecorder[] BuildRecorders(INotifyPropertyChanged eventSource)
         {
             var eventRecorder = new EventRecorder(eventSource, "PropertyChanged");

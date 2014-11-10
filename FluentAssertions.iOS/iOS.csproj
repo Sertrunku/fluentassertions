@@ -42,9 +42,9 @@
     <AssemblyOriginatorKeyFile>..\FluentAssertions.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions.Core">
-      <HintPath>..\packages\FluentAssertions.3.1.229\lib\portable-monotouch+monoandroid\FluentAssertions.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="FluentAssertions.Core, Version=3.2.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentAssertions.3.2.1\lib\portable-monotouch+monoandroid\FluentAssertions.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -56,8 +56,8 @@
     <Compile Include="..\FluentAssertions.Net40\Common\DefaultReflectionProvider.cs">
       <Link>Common\DefaultReflectionProvider.cs</Link>
     </Compile>
-    <Compile Include="..\FluentAssertions.Net40\Common\PlatformInitializer.cs">
-      <Link>Common\PlatformInitializer.cs</Link>
+    <Compile Include="..\FluentAssertions.Net40\Common\ProvidePlatformServices.cs">
+      <Link>Common\ProvidePlatformServices.cs</Link>
     </Compile>
     <Compile Include="..\FluentAssertions.Net40\EventSourceExtensions.cs">
       <Link>EventSourceExtensions.cs</Link>
