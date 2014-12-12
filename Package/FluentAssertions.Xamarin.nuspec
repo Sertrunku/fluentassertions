@@ -3,7 +3,7 @@
   <metadata> 
     <id>FluentAssertions.Xamarin</id>
     <title>Fluent Assertions for Xamarin</title>
-    <version>3.2.1</version>
+    <version>3.2.2</version>
     <owners>onovotny</owners>
     <authors>Oren Novotny, Dennis Doomen, Martin Opdam</authors>
     <summary>
@@ -17,14 +17,14 @@
     <licenseUrl>https://github.com/onovotny/fluentassertions/blob/Xamarin-Support/LICENSE</licenseUrl>    
     <projectUrl>https://github.com/onovotny/fluentassertions</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>NUnit TDD BDD Fluent Xamarin MonoTouch MonoAndroid iOS Android</tags>
+    <tags>NUnit TDD BDD Fluent Xamarin MonoTouch MonoAndroid iOS Android Xamarin.iOS</tags>
     <copyright>© Oren Novotny 2014</copyright>
     <releaseNotes>
       See https://github.com/dennisdoomen/fluentassertions/releases/
     </releaseNotes>
     <dependencies>
       <group>
-        <dependency id="FluentAssertions" version="[3.2.1,3.3)" />
+        <dependency id="FluentAssertions" version="[3.2.2,3.3)" />
       </group>
     </dependencies>
   </metadata>
@@ -38,5 +38,10 @@
     <file src="lib\monotouch\FluentAssertions.dll" target="lib\monotouch\FluentAssertions.dll" />
     <file src="lib\monotouch\FluentAssertions.pdb" target="lib\monotouch\FluentAssertions.pdb" />
     <file src="lib\monotouch\FluentAssertions.xml" target="lib\monotouch\FluentAssertions.xml" />
+
+    <!-- Xamarin.iOS -->
+    <file src="lib\Xamarin.iOS\FluentAssertions.dll" target="lib\Xamarin.iOS\FluentAssertions.dll" />
+    <file src="lib\Xamarin.iOS\FluentAssertions.pdb" target="lib\Xamarin.iOS\FluentAssertions.pdb" />
+    <file src="lib\Xamarin.iOS\FluentAssertions.xml" target="lib\Xamarin.iOS\FluentAssertions.xml" />
   </files>
 </package>
