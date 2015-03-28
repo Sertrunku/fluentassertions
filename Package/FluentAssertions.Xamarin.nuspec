@@ -3,7 +3,7 @@
   <metadata> 
     <id>FluentAssertions.Xamarin</id>
     <title>Fluent Assertions for Xamarin</title>
-    <version>3.2.2</version>
+    <version>3.3.1</version>
     <owners>onovotny</owners>
     <authors>Oren Novotny, Dennis Doomen, Martin Opdam</authors>
     <summary>
@@ -18,13 +18,13 @@
     <projectUrl>https://github.com/onovotny/fluentassertions</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>NUnit TDD BDD Fluent Xamarin MonoTouch MonoAndroid iOS Android Xamarin.iOS</tags>
-    <copyright>© Oren Novotny 2014</copyright>
+    <copyright>© Oren Novotny 2015</copyright>
     <releaseNotes>
       See https://github.com/dennisdoomen/fluentassertions/releases/
     </releaseNotes>
     <dependencies>
       <group>
-        <dependency id="FluentAssertions" version="[3.2.2,3.3)" />
+        <dependency id="FluentAssertions" version="[3.3.0,3.4)" />
       </group>
     </dependencies>
   </metadata>
