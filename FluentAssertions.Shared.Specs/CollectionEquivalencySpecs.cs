@@ -192,7 +192,7 @@ namespace FluentAssertions.Specs
             act.ShouldThrow<AssertFailedException>()
                 .WithMessage(
                     "Subject is enumerable for more than one type.  " +
-                    "It is not known which type should be use for equivalence.\r\n" +
+                    "It is not known which type should be use for equivalence." + Environment.NewLine +
                     "IEnumerable is implemented for the following types: System.String, System.Object*");
         }
 
