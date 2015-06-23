@@ -11,6 +11,8 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using TestClassAttribute = NUnit.Framework.TestFixtureAttribute;
 using TestMethodAttribute = NUnit.Framework.TestCaseAttribute;
 using AssertFailedException = NUnit.Framework.AssertionException;
+using TestInitializeAttribute = NUnit.Framework.SetUpAttribute;
+using Assert = NUnit.Framework.Assert;
 #else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
@@ -87,9 +89,19 @@ namespace FluentAssertions.Specs
 
         internal class ExcludeForeignKeysSelectionRule : IMemberSelectionRule
         {
+            public bool OverridesStandardIncludeRules
+            {
+                get { return false; }
+            }
+
             public IEnumerable<SelectedMemberInfo> SelectMembers(IEnumerable<SelectedMemberInfo> selectedMembers, ISubjectInfo context, IEquivalencyAssertionOptions config)
             {
                 return selectedMembers.Where(pi => !pi.Name.EndsWith("Id")).ToArray();
+            }
+
+            bool IMemberSelectionRule.IncludesMembers
+            {
+                get { return OverridesStandardIncludeRules; }
             }
         }
 

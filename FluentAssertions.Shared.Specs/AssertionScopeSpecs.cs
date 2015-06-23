@@ -2,14 +2,14 @@ using System;
 using System.Text.RegularExpressions;
 
 using FluentAssertions.Execution;
-
 #if !OLD_MSTEST && !NUNIT
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #elif NUNIT
-using NUnit.Framework;
 using TestClassAttribute = NUnit.Framework.TestFixtureAttribute;
 using TestMethodAttribute = NUnit.Framework.TestCaseAttribute;
 using AssertFailedException = NUnit.Framework.AssertionException;
+using TestInitializeAttribute = NUnit.Framework.SetUpAttribute;
+using Assert = NUnit.Framework.Assert;
 #else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif

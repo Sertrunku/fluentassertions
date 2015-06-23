@@ -4,4 +4,4 @@ msbuild /p:Configuration=Release /p:Platform="Any CPU" /t:Rebuild FluentAssertio
 
 tools\GitLink.exe . -u https://github.com/onovotny/fluentassertions -b Xamarin-Support
 
-tools\nuget pack package\FluentAssertions.Xamarin.nuspec -o package
+.nuget\nuget pack package\FluentAssertions.Xamarin.nuspec -o package

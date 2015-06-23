@@ -4,18 +4,23 @@ using System.Net;
 using Chill;
 using FluentAssertions.Equivalency;
 using FluentAssertions.Execution;
+
 #if !OLD_MSTEST && !NUNIT
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #elif NUNIT
 using TestClassAttribute = NUnit.Framework.TestFixtureAttribute;
 using TestMethodAttribute = NUnit.Framework.TestCaseAttribute;
 using AssertFailedException = NUnit.Framework.AssertionException;
+using TestInitializeAttribute = NUnit.Framework.SetUpAttribute;
+using Assert = NUnit.Framework.Assert;
 #else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
 
 namespace FluentAssertions.Specs
 {
+#if !SILVERLIGHT
+
     namespace AssertionOptionsSpecs
     {
         public class Given_temporary_global_assertion_options : GivenWhenThen
@@ -311,4 +316,5 @@ namespace FluentAssertions.Specs
             }
         }
     }
+#endif
 }

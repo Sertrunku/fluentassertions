@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
 #if !OLD_MSTEST && !NUNIT
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #elif NUNIT
@@ -590,7 +589,7 @@ namespace FluentAssertions.Specs
             act.ShouldThrow<AssertFailedException>()
                 .WithMessage("Expected collection*b*c*a*ordered*Text*should be sorted*a*b*c*");
         }
-        
+
         [TestMethod]
         public void When_the_items_are_in_ascending_order_using_the_specified_property_it_should_not_throw()
         {
@@ -613,8 +612,8 @@ namespace FluentAssertions.Specs
             // Assert
             //-----------------------------------------------------------------------------------------------------------
             act.ShouldNotThrow();
-        }        
-        
+        }
+
         [TestMethod]
         public void When_the_items_are_not_in_descending_order_using_the_specified_property_it_should_throw()
         {
@@ -639,7 +638,7 @@ namespace FluentAssertions.Specs
             act.ShouldThrow<AssertFailedException>()
                 .WithMessage("Expected collection*b*c*a*ordered*Text*should be sorted*c*b*a*");
         }
-        
+
         [TestMethod]
         public void When_the_items_are_in_descending_order_using_the_specified_property_it_should_not_throw()
         {
@@ -682,7 +681,7 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             act.ShouldNotThrow();
         }
-        
+
         [TestMethod]
         public void When_the_collection_is_null_while_asserting_a_particular_order_it_should_fail()
         {
@@ -702,7 +701,7 @@ namespace FluentAssertions.Specs
             act.ShouldThrow<ArgumentNullException>()
                 .WithMessage("Cannot assert collection ordering without specifying a property*propertyExpression*");
         }
-        
+
         [TestMethod]
         public void When_asserting_the_order_of_a_collection_without_specifying_a_property_it_should_throw()
         {
@@ -722,7 +721,7 @@ namespace FluentAssertions.Specs
             act.ShouldThrow<AssertFailedException>()
                 .WithMessage("Expected*Text*found*null*");
         }
-        
+
         [TestMethod]
         public void When_asserting_the_order_of_a_collection_with_an_invalid_property_expression_it_should_throw()
         {
@@ -743,7 +742,7 @@ namespace FluentAssertions.Specs
                 .WithMessage("Expression*o.GetHashCode()*cannot be used to select a member*");
         }
 
-        private class SomeClass 
+        private class SomeClass
         {
             public string Text { get; set; }
         }

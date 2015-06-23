@@ -10,6 +10,8 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using TestClassAttribute = NUnit.Framework.TestFixtureAttribute;
 using TestMethodAttribute = NUnit.Framework.TestCaseAttribute;
 using AssertFailedException = NUnit.Framework.AssertionException;
+using TestInitializeAttribute = NUnit.Framework.SetUpAttribute;
+using Assert = NUnit.Framework.Assert;
 #else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
@@ -38,7 +40,8 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            act.ShouldNotThrow("the declared type of the items is object");
+            act.ShouldThrow<AssertFailedException>()
+                .WithMessage("*Wheels*not have*VehicleId*not have*");
         }
 
         [TestMethod]
@@ -65,7 +68,7 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
-        public void When_a_non_generic_dictionary_is_typed_as_object_and_runtime_typing_has_not_been_specified_the_declared_type_should_be_respected()
+        public void When_a_non_generic_dictionary_is_typed_as_object_it_should_respect_the_runtime_type()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -81,7 +84,7 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            act.ShouldThrow<InvalidOperationException>("the type of the subject is object");
+            act.ShouldNotThrow();
         }
 
         [TestMethod]
@@ -123,7 +126,8 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            act.ShouldNotThrow("the declared type of the values is 'object'");
+            act.ShouldThrow<AssertFailedException>()
+                .WithMessage("*Other*Special*");
         }
 
         private class NonGenericDictionary : IDictionary
@@ -368,7 +372,7 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
-        public void When_a_generic_dictionary_is_typed_as_object_and_runtime_typing_has_not_been_specified_the_declared_type_should_be_respected()
+        public void When_a_generic_dictionary_is_typed_as_object_it_should_respect_the_runtime_typed()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -384,7 +388,7 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            act.ShouldThrow<InvalidOperationException>("the type of the subject is object");
+            act.ShouldNotThrow();
         }
 
         [TestMethod]

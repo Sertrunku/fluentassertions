@@ -14,10 +14,10 @@ namespace FluentAssertions.Common
 
         public IConfigurationStore ConfigurationStore
         {
-#if !__IOS__ && !ANDROID
-            get { return new AppSettingsConfigurationStore(); }
+#if ANDROID || __IOS__
+            get { return new NullConfigurationStore(); }
 #else
-            get { return null; }
+            get { return new AppSettingsConfigurationStore(); }
 #endif
         }
 

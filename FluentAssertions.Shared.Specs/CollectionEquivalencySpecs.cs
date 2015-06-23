@@ -1,19 +1,18 @@
-using FluentAssertions.Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
+using FluentAssertions.Common;
 using FluentAssertions.Equivalency;
-
 #if !OLD_MSTEST && !NUNIT
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 #elif NUNIT
 using TestClassAttribute = NUnit.Framework.TestFixtureAttribute;
 using TestMethodAttribute = NUnit.Framework.TestCaseAttribute;
 using AssertFailedException = NUnit.Framework.AssertionException;
+using TestInitializeAttribute = NUnit.Framework.SetUpAttribute;
+using Assert = NUnit.Framework.Assert;
 #else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
@@ -23,10 +22,10 @@ namespace FluentAssertions.Specs
     [TestClass]
     public class CollectionEquivalencySpecs
     {
+        #region Include & Exclude
+
         [TestMethod]
-        public void
-            When_a_deeply_nested_property_of_a_collection_with_an_invalid_value_is_excluded_it_should_not_throw
-            ()
+        public void When_a_deeply_nested_property_of_a_collection_with_an_invalid_value_is_excluded_it_should_not_throw()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -39,7 +38,7 @@ namespace FluentAssertions.Specs
                     Text = "Level1",
                     Level = new
                     {
-                        Text = "Level2",
+                        Text = "Level2"
                     },
                     Collection = new[]
                     {
@@ -57,7 +56,7 @@ namespace FluentAssertions.Specs
                     Text = "Level1",
                     Level = new
                     {
-                        Text = "Level2",
+                        Text = "Level2"
                     },
                     Collection = new[]
                     {
@@ -70,10 +69,7 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            Action act =
-                () =>
-                    subject.ShouldBeEquivalentTo(expected,
-                        options => options.
+            Action act = () => subject.ShouldBeEquivalentTo(expected, options => options.
                             Excluding(x => x.Level.Collection[1].Number).
                             Excluding(x => x.Level.Collection[1].Text));
 
@@ -83,10 +79,37 @@ namespace FluentAssertions.Specs
             act.ShouldNotThrow();
         }
 
+        [TestMethod]
+        public void When_a_specific_property_is_included_it_should_ignore_the_rest_of_the_properties()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-----------------------------------------------------------------------------------------------------------
+            var result = new[] {new {A = "aaa", B = "bbb"}};
+
+            var expected = new
+            {
+                A = "aaa",
+                B = "ccc"
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => result.ShouldAllBeEquivalentTo(new[] {expected}, options => options.Including(x => x.A));
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Assert
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldNotThrow();
+        }
+
+        #endregion
+
         #region Non-Generic Collections
 
         [TestMethod]
-        public void When_asserting_equivalence_of_collections_it_should_respect_the_declared_type()
+        public void When_asserting_equivalence_of_non_generic_collections_it_should_respect_the_runtime_type()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -102,7 +125,8 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            act.ShouldNotThrow("the declared type is object");
+            act.ShouldThrow<AssertFailedException>()
+                .WithMessage("*Wheels*not have*VehicleId*not have*");
         }
 
         [TestMethod]
@@ -190,10 +214,7 @@ namespace FluentAssertions.Specs
             // Assert
             //-----------------------------------------------------------------------------------------------------------
             act.ShouldThrow<AssertFailedException>()
-                .WithMessage(
-                    "Subject is enumerable for more than one type.  " +
-                    "It is not known which type should be use for equivalence." + Environment.NewLine +
-                    "IEnumerable is implemented for the following types: System.String, System.Object*");
+                .WithMessage("*System.String*System.Object*cannot determine*");
         }
 
         [TestMethod]
@@ -242,9 +263,7 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
-        public void
-            When_a_strongly_typed_collection_is_declared_as_an_untyped_collection_is_should_respect_the_declared_type
-            ()
+        public void When_a_strongly_typed_collection_is_declared_as_an_untyped_collection_is_should_respect_the_runtype_type()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -260,7 +279,8 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            act.ShouldNotThrow("the declared type is object");
+            act.ShouldThrow<AssertFailedException>()
+                .WithMessage("*Wheels*not have*VehicleId*not have*");
         }
 
         [TestMethod]
@@ -328,7 +348,8 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            act.ShouldThrow<AssertFailedException>("the runtime type is assignable to two IEnumerable interfaces");
+            act.ShouldThrow<AssertFailedException>("the runtime type is assignable to two IEnumerable interfaces")
+                .WithMessage("*cannot determine which one*");
         }
 
         private class EnumerableOfStringAndObject : IEnumerable<string>, IEnumerable<object>
@@ -354,9 +375,7 @@ namespace FluentAssertions.Specs
         #region Collection Equivalence
 
         [TestMethod]
-        public void
-            When_two_unordered_lists_are_structurally_equivalent_and_order_is_strict_it_should_fail
-            ()
+        public void When_two_unordered_lists_are_structurally_equivalent_and_order_is_strict_it_should_fail()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -390,16 +409,13 @@ namespace FluentAssertions.Specs
                     Name = "John",
                     Age = 27,
                     Id = 1
-                },
+                }
             };
 
             //-----------------------------------------------------------------------------------------------------------
             // Act
             //-----------------------------------------------------------------------------------------------------------
-            Action action =
-                () =>
-                    subject.ShouldAllBeEquivalentTo(expectation,
-                        options => options.WithStrictOrdering());
+            Action action = () => subject.ShouldAllBeEquivalentTo(expectation, options => options.WithStrictOrdering());
 
             //-----------------------------------------------------------------------------------------------------------
             // Assert
@@ -410,9 +426,7 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
-        public void
-            When_an_unordered_collection_must_be_strict_using_an_expression_it_should_throw
-            ()
+        public void When_an_unordered_collection_must_be_strict_using_an_expression_it_should_throw()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -520,9 +534,7 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
-        public void
-            When_two_lists_only_differ_in_excluded_properties_it_should_not_throw
-            ()
+        public void When_two_lists_only_differ_in_excluded_properties_it_should_not_throw()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -548,12 +560,12 @@ namespace FluentAssertions.Specs
                 new CustomerDto
                 {
                     Name = "John",
-                    Age = 27,
+                    Age = 27
                 },
                 new CustomerDto
                 {
                     Name = "Jane",
-                    Age = 30,
+                    Age = 30
                 }
             };
 
@@ -573,8 +585,72 @@ namespace FluentAssertions.Specs
             action.ShouldNotThrow();
         }
 
+        public class MyObject
+        {
+            public string MyString { get; set; }
+            public MyChildObject Child { get; set; }
+        }
+
+        public class MyChildObject
+        {
+            public int Id { get; set; }
+
+            public string MyChildString { get; set; }
+
+            public override bool Equals(object obj)
+            {
+                return (obj is MyChildObject) && (((MyChildObject) obj).Id == Id);
+            }
+
+            public override int GetHashCode()
+            {
+                return Id.GetHashCode();
+            }
+        }
+
         [TestMethod]
-        public void When_two_collections_have_properties_of_the_contained_items_excluded_but_still_differ_it_should_throw()
+        public void When_nested_objects_are_excluded_from_collections_it_should_use_simple_equality_semantics()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-----------------------------------------------------------------------------------------------------------
+            MyObject actual = new MyObject
+            {
+                MyString = "identical string",
+                Child = new MyChildObject
+                {
+                    Id = 1,
+                    MyChildString = "identical string"
+                }
+            };
+
+            MyObject expectation = new MyObject
+            {
+                MyString = "identical string",
+                Child = new MyChildObject
+                {
+                    Id = 1,
+                    MyChildString = "DIFFERENT STRING"
+                }
+            };
+
+            IList<MyObject> actualList = new List<MyObject> {actual};
+            IList<MyObject> expectationList = new List<MyObject> {expectation};
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => actualList.ShouldAllBeEquivalentTo(expectationList, opt => opt.ExcludingNestedObjects());
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Assert
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldNotThrow();
+        }
+
+        [TestMethod]
+        public void
+            When_two_collections_have_properties_of_the_contained_items_excluded_but_still_differ_it_should_throw()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -587,7 +663,6 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             Action act = () => list1.ShouldAllBeEquivalentTo(list2, config => config.Excluding(ctx => ctx.Key));
 
-
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
@@ -595,7 +670,8 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
-        public void When_ShouldAllBeEquivalentTo_has_selection_rules_configured_they_should_be_evaluated_from_right_to_left()
+        public void
+            When_ShouldAllBeEquivalentTo_has_selection_rules_configured_they_should_be_evaluated_from_right_to_left()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -614,7 +690,6 @@ namespace FluentAssertions.Specs
                 return config;
             });
 
-
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
@@ -623,28 +698,70 @@ namespace FluentAssertions.Specs
 
         private class SelectPropertiesSelectionRule : IMemberSelectionRule
         {
-            public IEnumerable<SelectedMemberInfo> SelectMembers(IEnumerable<SelectedMemberInfo> selectedMembers, ISubjectInfo context, IEquivalencyAssertionOptions config)
+            public IEnumerable<SelectedMemberInfo> SelectMembers(IEnumerable<SelectedMemberInfo> selectedMembers,
+                ISubjectInfo context, IEquivalencyAssertionOptions config)
             {
                 return context.CompileTimeType.GetNonPrivateProperties().Select(SelectedMemberInfo.Create);
+            }
+
+            public bool OverridesStandardIncludeRules
+            {
+                get { throw new NotImplementedException(); }
+        }
+
+            bool IMemberSelectionRule.IncludesMembers
+            {
+                get { return OverridesStandardIncludeRules; }
             }
         }
 
         private class SelectNoMembersSelectionRule : IMemberSelectionRule
         {
-            public IEnumerable<SelectedMemberInfo> SelectMembers(IEnumerable<SelectedMemberInfo> selectedMembers, ISubjectInfo context, IEquivalencyAssertionOptions config)
+            public bool OverridesStandardIncludeRules
+            {
+                get { return true; }
+            }
+
+            public IEnumerable<SelectedMemberInfo> SelectMembers(IEnumerable<SelectedMemberInfo> selectedMembers,
+                ISubjectInfo context, IEquivalencyAssertionOptions config)
             {
                 return Enumerable.Empty<SelectedMemberInfo>();
             }
+
+            bool IMemberSelectionRule.IncludesMembers
+            {
+                get { return OverridesStandardIncludeRules; }
+        }
         }
 
         [TestMethod]
-        public void When_two_collections_have_nested_members_of_the_contained_equivalent_but_not_equal_it_should_not_throw()
+        public void
+            When_two_collections_have_nested_members_of_the_contained_equivalent_but_not_equal_it_should_not_throw()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
             //-----------------------------------------------------------------------------------------------------------
-            var list1 = new[] {new {Nested = new ClassWithOnlyAProperty {Value = 1}}};
-            var list2 = new[] {new {Nested = new {Value = 1}}};
+            var list1 = new[]
+            {
+                new
+                {
+                    Nested = new ClassWithOnlyAProperty
+                    {
+                        Value = 1
+                    }
+                }
+            };
+
+            var list2 = new[]
+            {
+                new
+                {
+                    Nested = new
+                    {
+                        Value = 1
+                    }
+                }
+            };
 
             //-----------------------------------------------------------------------------------------------------------
             // Act
@@ -695,7 +812,7 @@ namespace FluentAssertions.Specs
                         new CustomerDto
                         {
                             Name = "John",
-                            Age = 27,
+                            Age = 27
                         }
                 },
                 new
@@ -704,7 +821,7 @@ namespace FluentAssertions.Specs
                         new CustomerDto
                         {
                             Name = "Jane",
-                            Age = 30,
+                            Age = 30
                         }
                 }
             };
@@ -821,7 +938,7 @@ namespace FluentAssertions.Specs
                     Name = "John",
                     Age = 27,
                     Id = 1
-                },
+                }
             };
 
             //-----------------------------------------------------------------------------------------------------------
@@ -986,7 +1103,7 @@ namespace FluentAssertions.Specs
                     Name = "John",
                     Age = 27,
                     Id = 1
-                },
+                }
             };
 
             var expectation = new List<Customer>
@@ -1050,7 +1167,7 @@ namespace FluentAssertions.Specs
                     Name = "John",
                     Age = 27,
                     Id = 1
-                },
+                }
             };
 
             //-----------------------------------------------------------------------------------------------------------
@@ -1082,7 +1199,7 @@ namespace FluentAssertions.Specs
                     Name = "John",
                     Age = 27,
                     Id = 1
-                },
+                }
             };
 
             var expectation = new List<Customer>
@@ -1152,7 +1269,7 @@ namespace FluentAssertions.Specs
                     Name = "John",
                     Age = 27,
                     Id = 1
-                },
+                }
             };
 
             //-----------------------------------------------------------------------------------------------------------
@@ -1218,7 +1335,7 @@ namespace FluentAssertions.Specs
                     Name = "John",
                     Age = 27,
                     Id = 1
-                },
+                }
             };
 
             //-----------------------------------------------------------------------------------------------------------
@@ -1234,8 +1351,7 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
-        public void
-            When_a_collection_is_compared_to_a_non_collection_it_should_throw
+        public void When_a_collection_is_compared_to_a_non_collection_it_should_throw
             ()
         {
             //-----------------------------------------------------------------------------------------------------------
@@ -1251,9 +1367,8 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            action.ShouldThrow<AssertFailedException>()
-                .WithMessage(
-                    "Subject is a collection and cannot be compared with a non-collection type*");
+            action.ShouldThrow<AssertFailedException>().WithMessage(
+                "Expected subject to be \"hello\", but found {empty}*");
         }
 
         #endregion
@@ -1299,26 +1414,26 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
             //-----------------------------------------------------------------------------------------------------------
-            var logbook = new EquivalencySpecs.LogbookCode("SomeKey");
+            var logbook = new BasicEquivalencySpecs.LogbookCode("SomeKey");
 
-            var logbookEntry = new EquivalencySpecs.LogbookEntryProjection
+            var logbookEntry = new BasicEquivalencySpecs.LogbookEntryProjection
             {
                 Logbook = logbook,
                 LogbookRelations = new[]
                 {
-                    new EquivalencySpecs.LogbookRelation
+                    new BasicEquivalencySpecs.LogbookRelation
                     {
                         Logbook = logbook
                     }
                 }
             };
 
-            var equivalentLogbookEntry = new EquivalencySpecs.LogbookEntryProjection
+            var equivalentLogbookEntry = new BasicEquivalencySpecs.LogbookEntryProjection
             {
                 Logbook = logbook,
                 LogbookRelations = new[]
                 {
-                    new EquivalencySpecs.LogbookRelation
+                    new BasicEquivalencySpecs.LogbookRelation
                     {
                         Logbook = logbook
                     }
@@ -1483,7 +1598,6 @@ namespace FluentAssertions.Specs
                 .WithMessage(
                     "*member Customers to be*Customer[]*, but*System.String*");
         }
-
 
         [TestMethod]
         public void
@@ -1731,7 +1845,7 @@ namespace FluentAssertions.Specs
             {
                 Customers = new Dictionary<string, string>
                 {
-                    {"Key1", "Value1"},
+                    {"Key1", "Value1"}
                 }
             };
 
@@ -1912,6 +2026,205 @@ namespace FluentAssertions.Specs
             {
                 innerRoles[userId] = roles.ToList();
             }
+        }
+
+        #endregion
+
+        #region Multi-dimensional Arrays
+
+        [TestMethod]
+        public void When_two_multi_dimensional_arrays_are_equivalent_it_should_not_throw()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            var subject = new[,]
+            {
+                {1, 2, 3},
+                {4, 5, 6}
+            };
+
+            var expectation = new[,]
+            {
+                {1, 2, 3},
+                {4, 5, 6}
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => subject.ShouldBeEquivalentTo(expectation);
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldNotThrow();
+        }
+
+        [TestMethod]
+        public void When_two_multi_dimensional_arrays_are_not_equivalent_it_should_throw()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            var actual = new[,]
+            {
+                {1, 2, 3},
+                {4, 5, 6}
+            };
+
+            var expectation = new[,]
+            {
+                {1, 2, 4},
+                {4, -5, 6}
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => actual.ShouldBeEquivalentTo(expectation);
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<AssertFailedException>()
+                .WithMessage("*item[0,2]*4*3*item[1,1]*-5*5*");
+        }
+
+        [TestMethod]
+        public void When_the_number_of_dimensions_of_the_arrays_are_not_the_same_it_should_throw()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            var actual = new[,]
+            {
+                {1, 2, 3},
+                {4, 5, 6}
+            };
+
+            var expectation = new[]
+            {
+                1, 2
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => actual.ShouldBeEquivalentTo(expectation);
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<AssertFailedException>()
+                .WithMessage("Expected*1 dimension(s), but*2*");
+        }
+        
+        [TestMethod]
+        public void When_the_expectation_is_not_a_multi_dimensional_array_it_should_throw()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            var actual = new[,]
+            {
+                {1, 2, 3},
+                {4, 5, 6}
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => actual.ShouldBeEquivalentTo("not-a-multi-dimensional-array");
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<AssertFailedException>()
+                .WithMessage("Can't compare a multi-dimensional array to something else.*");
+        }
+
+        [TestMethod]
+        public void When_the_expectation_is_null_it_should_throw()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            var actual = new[,]
+            {
+                {1, 2, 3},
+                {4, 5, 6}
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => actual.ShouldBeEquivalentTo(null);
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<AssertFailedException>()
+                .WithMessage("Can't compare a multi-dimensional array to <null>*");
+        }
+
+        [TestMethod]
+        public void When_the_length_of_the_first_dimension_differs_between_the_arrays_it_should_throw()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            var actual = new[,]
+            {
+                {1, 2, 3},
+                {4, 5, 6}
+            };
+
+            var expectation = new[,]
+            {
+                {1, 2},
+                {4, 5}
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => actual.ShouldBeEquivalentTo(expectation);
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<AssertFailedException>()
+                .WithMessage("Expected dimension 1 to contain 2 item(s), but found 3*");
+        }
+        
+        [TestMethod]
+        public void When_the_length_of_the_2nd_dimension_differs_between_the_arrays_it_should_throw()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            var actual = new[,]
+            {
+                {1, 2, 3},
+                {4, 5, 6}
+            };
+
+            var expectation = new[,]
+            {
+                {1, 2, 3},
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => actual.ShouldBeEquivalentTo(expectation);
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<AssertFailedException>()
+                .WithMessage("Expected dimension 0 to contain 1 item(s), but found 2*");
         }
 
         #endregion

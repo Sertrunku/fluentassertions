@@ -21,7 +21,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace FluentAssertions.Specs
 {
     [TestClass]
-    public class EquivalencySpecs
+    public class BasicEquivalencySpecs
     {
         #region General
 
@@ -45,6 +45,43 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             act.ShouldThrow<AssertFailedException>().WithMessage(
                 "Expected subject to be <null>, but found { }*");
+        }
+
+        [TestMethod]
+        public void When_comparing_nested_collection_with_a_null_value_it_should_fail_with_the_correct_message()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-----------------------------------------------------------------------------------------------------------
+            var subject = new[]
+            {
+                new MyClass {Items = new[] {"a"}}
+            };
+
+            var expectation = new[]
+            {
+                new MyClass()
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => subject.ShouldAllBeEquivalentTo(expectation);
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Assert
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<AssertFailedException>().WithMessage(
+                "Expected*item[0].Items*null*, but found*\"a\"*");
+        }
+
+        public class MyClass
+        {
+            public IEnumerable<string> Items
+            {
+                get;
+                set;
+            }
         }
 
         [TestMethod]
@@ -163,7 +200,7 @@ namespace FluentAssertions.Specs
         }
 
         [TestMethod]
-        public void When_asserting_equivalence_of_strings_typed_as_objects_it_should_fail()
+        public void When_asserting_equivalence_of_strings_typed_as_objects_it_should_compare_them_as_strings()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -182,11 +219,11 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            act.ShouldThrow<InvalidOperationException>("because, typed as object, there were no members to compare");
+            act.ShouldNotThrow();
         }
 
         [TestMethod]
-        public void When_asserting_equivalence_of_ints_typed_as_objects_it_should_fail()
+        public void When_asserting_equivalence_of_ints_typed_as_objects_it_should_use_the_runtime_type()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange
@@ -203,7 +240,7 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            act.ShouldThrow<InvalidOperationException>("because, typed as object, there were no members to compare");
+            act.ShouldNotThrow();
         }
 
         [TestMethod]
@@ -895,7 +932,7 @@ With configuration:*");
             //-----------------------------------------------------------------------------------------------------------
             action.ShouldNotThrow();
         }
-
+        
         [TestMethod]
         public void When_a_reference_to_an_explicit_interface_impl_is_provided_it_should_only_include_those_properties()
         {
@@ -2075,6 +2112,34 @@ With configuration:*");
         }
 
         [TestMethod]
+        public void When_nested_objects_should_be_excluded_it_should_do_a_simple_equality_check_instead()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-----------------------------------------------------------------------------------------------------------
+            var item = new Item
+            {
+                Child = new Item()
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => item.ShouldBeEquivalentTo(new Item(), options => options.ExcludingNestedObjects());
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Assert
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldThrow<AssertFailedException>()
+                .WithMessage("Expected*Item*null*");
+        }
+
+        public class Item
+        {
+            public Item Child { get; set; }
+        }
+
+        [TestMethod]
         public void When_not_all_the_properties_of_the_nested_objects_are_equal_it_should_throw()
         {
             //-----------------------------------------------------------------------------------------------------------
@@ -2600,7 +2665,7 @@ With configuration:*");
         #region Enums
 
         [TestMethod]
-        public void When_asserting_the_same_enum_member_is_equivilent_it_should_succeed()
+        public void When_asserting_the_same_enum_member_is_equivalent_it_should_succeed()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange / Act
@@ -2614,7 +2679,7 @@ With configuration:*");
         }
 
         [TestMethod]
-        public void When_asserting_different_enum_members_are_equivilent_it_should_fail()
+        public void When_asserting_different_enum_members_are_equivalent_it_should_fail()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Arrange / Act
@@ -2725,9 +2790,40 @@ With configuration:*");
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            act.ShouldThrow<InvalidOperationException>("because, typed as object, there were no members to compare");
+            act.ShouldNotThrow();
         }
 
+        [TestMethod]
+        public void When_a_numeric_member_is_compared_with_an_enum_it_should_respect_the_enum_options()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Arrange
+            //-----------------------------------------------------------------------------------------------------------
+            var actual = new
+            {
+                Property = 1
+            };
+
+            var expected = new
+            {
+                Property = TestEnum.First
+            };
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+            Action act = () => actual.ShouldBeEquivalentTo(expected, options => options.ComparingEnumsByValue());
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Assert
+            //-----------------------------------------------------------------------------------------------------------
+            act.ShouldNotThrow();
+        }
+
+        public enum TestEnum
+        {
+            First = 1
+        }
         #endregion
 
         #region Memberless Objects
@@ -2829,7 +2925,7 @@ With configuration:*");
         }
 
         [TestMethod]
-        public void When_asserting_instances_of_arrays_of_types_in_System_are_equivalent_it_should_respect_the_declared_type()
+        public void When_asserting_instances_of_arrays_of_types_in_System_are_equivalent_it_should_respect_the_runtime_type()
         {
             //-----------------------------------------------------------------------------------------------------------
             // Act
@@ -2845,7 +2941,7 @@ With configuration:*");
             //-----------------------------------------------------------------------------------------------------------
             // Assert
             //-----------------------------------------------------------------------------------------------------------
-            act.ShouldThrow<InvalidOperationException>();
+            act.ShouldNotThrow();
         }
 
         #endregion
