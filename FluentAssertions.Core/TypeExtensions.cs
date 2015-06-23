@@ -13,21 +13,16 @@ namespace FluentAssertions
     [DebuggerNonUserCode]
     public static class TypeExtensions
     {
-        private const BindingFlags PublicPropertiesFlag =
-            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-
         /// <summary>
         /// Returns the types that are visible outside the specified <see cref="Assembly"/>.
         /// </summary>
         public static TypeSelector Types(this Assembly assembly)
         {
-            return new TypeSelector(
-                assembly.GetTypes()
-                );
+            return new TypeSelector(assembly.GetTypes());
         }
 
         /// <summary>
-        /// Returns a method selector for the current <see cref="Type"/>.
+        /// Returns a method selector for the current <see cref="System.Type"/>.
         /// </summary>
         public static MethodInfoSelector Methods(this Type type)
         {
@@ -35,7 +30,7 @@ namespace FluentAssertions
         }
 
         /// <summary>
-        /// Returns a method selector for the current <see cref="Type"/>.
+        /// Returns a method selector for the current <see cref="System.Type"/>.
         /// </summary>
         public static MethodInfoSelector Methods(this TypeSelector typeSelector)
         {
@@ -43,7 +38,7 @@ namespace FluentAssertions
         }
 
         /// <summary>
-        /// Returns a property selector for the current <see cref="Type"/>.
+        /// Returns a property selector for the current <see cref="System.Type"/>.
         /// </summary>
         public static PropertyInfoSelector Properties(this Type type)
         {
@@ -51,7 +46,7 @@ namespace FluentAssertions
         }
 
         /// <summary>
-        /// Returns a property selector for the current <see cref="Type"/>.
+        /// Returns a property selector for the current <see cref="System.Type"/>.
         /// </summary>
         public static PropertyInfoSelector Properties(this TypeSelector typeSelector)
         {

@@ -3,6 +3,11 @@ using System.ComponentModel;
 using FluentAssertions.Events;
 using FluentAssertions.Formatting;
 
+#if NET40 || NET45
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using FluentAssertions.Execution;
+#endif
 
 #if !OLD_MSTEST && !NUNIT
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -585,6 +590,55 @@ namespace FluentAssertions.Specs
             //-----------------------------------------------------------------------------------------------------------
             referenceToSubject.IsAlive.Should().BeFalse();
         }
+
+#if NET40 || NET45
+        [TestMethod]
+        public void When_the_fallback_assertion_exception_crosses_appdomain_boundaries_it_should_be_serializable()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Act / Assert
+            //-----------------------------------------------------------------------------------------------------------
+            new AssertFailedException("").Should().BeBinarySerializable();
+        }
+
+        [TestMethod]
+        public void When_the_fallback_assertion_exception_crosses_appdomain_boundaries_it_should_be_deserializable()
+        {
+            //-----------------------------------------------------------------------------------------------------------
+            // Arrange
+            //----------------------------------------------------------------------------------------------------------
+            Exception exception = new AssertionFailedException("Message");
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Act
+            //-----------------------------------------------------------------------------------------------------------
+
+            // Save the full ToString() value, including the exception message and stack trace.
+            string exceptionToString = exception.ToString();
+
+            // Round-trip the exception: Serialize and de-serialize with a BinaryFormatter
+            BinaryFormatter formatter = new BinaryFormatter();
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // "Save" object state
+                formatter.Serialize(memoryStream, exception);
+
+                // Re-use the same stream for de-serialization
+                memoryStream.Seek(0, 0);
+
+                // Replace the original exception with de-serialized one
+                exception = (AssertionFailedException)formatter.Deserialize(memoryStream);
+            }
+
+            //-----------------------------------------------------------------------------------------------------------
+            // Assert
+            //-----------------------------------------------------------------------------------------------------------
+
+            // Double-check that the exception message and stack trace (owned by the base Exception) are preserved
+            Assert.AreEqual(exceptionToString, exception.ToString(), "exception.ToString()");
+        }
+
+#endif
 
         #endregion
 

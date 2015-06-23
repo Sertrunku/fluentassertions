@@ -1,38 +1,54 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
-
-using FluentAssertions.Common;
 
 namespace FluentAssertions.Equivalency
 {
     public class EquivalencyValidationContext : IEquivalencyValidationContext
     {
+        private Type compileTimeType;
+
         public EquivalencyValidationContext()
         {
-            PropertyDescription = "";
-            PropertyPath = "";
+            SelectedMemberDescription = "";
+            SelectedMemberPath = "";
+        }
+
+        public SelectedMemberInfo SelectedMemberInfo { get; set; }
+
+        public string SelectedMemberPath { get; set; }
+
+        public string SelectedMemberDescription { get; set; }
+
+        [Obsolete]
+        public PropertyInfo PropertyInfo
+        {
+            get
+            {
+                var propertySelectedMemberInfo = SelectedMemberInfo as PropertySelectedMemberInfo;
+
+                if (propertySelectedMemberInfo != null)
+                {
+                    return propertySelectedMemberInfo.PropertyInfo;
+                }
+
+                return null;
+            }
+        }
+
+        [Obsolete]
+        public string PropertyPath
+        {
+            get { return SelectedMemberPath; }
+        }
+
+        [Obsolete]
+        public string PropertyDescription
+        {
+            get { return SelectedMemberDescription; }
         }
 
         /// <summary>
-        /// Gets the <see cref="ISubjectInfo.PropertyInfo" /> of the property that returned the current object, or 
-        /// <c>null</c> if the current object represents the root object.
-        /// </summary>
-        public PropertyInfo PropertyInfo { get; private set; }
-
-        /// <summary>
-        ///   Gets the full path from the root object until the current property, separated by dots.
-        /// </summary>
-        public string PropertyPath { get; set; }
-
-        /// <summary>
-        ///   Gets a textual description of the current property based on the <see cref="PropertyPath" />.
-        /// </summary>
-        public string PropertyDescription { get; private set; }
-
-        /// <summary>
-        /// Gets the value of the <see cref="ISubjectInfo.PropertyInfo" />
+        /// Gets the value of the <see cref="ISubjectInfo.SelectedMemberInfo" />
         /// </summary>
         public object Subject { get; set; }
 
@@ -57,14 +73,26 @@ namespace FluentAssertions.Equivalency
         /// </summary>
         public bool IsRoot
         {
-            get { return (PropertyDescription.Length == 0); }
+            get
+            {
+                // SMELL: That prefix should be obtained from some kind of constant
+                return (SelectedMemberDescription.Length == 0) ||
+                       (RootIsCollection && SelectedMemberDescription.StartsWith("item[") && !SelectedMemberDescription.Contains("."));
+            }
         }
 
         /// <summary>
-        /// Gets the compile-time type of the current object. If the current object is not the root object, then it returns the 
-        /// same <see cref="Type"/> as the <see cref="ISubjectInfo.RuntimeType"/> property does.
+        /// Gets the compile-time type of the current object. If the current object is not the root object and the type is not <see cref="object"/>, 
+        /// then it returns the same <see cref="System.Type"/> as the <see cref="ISubjectInfo.RuntimeType"/> property does.
         /// </summary>
-        public Type CompileTimeType { get; set; }
+        public Type CompileTimeType
+        {
+            get { return (compileTimeType != typeof (object)) ? compileTimeType : RuntimeType; }
+            set
+            {
+                compileTimeType = value;
+            }
+        }
 
         /// <summary>
         /// Gets the run-time type of the current object.
@@ -73,94 +101,29 @@ namespace FluentAssertions.Equivalency
         {
             get
             {
-                Type type = CompileTimeType;
                 if (Subject != null)
                 {
-                    type = Subject.GetType();
+                    return Subject.GetType();
                 }
-                else if (PropertyInfo != null)
+
+                if (SelectedMemberInfo != null)
                 {
-                    type = PropertyInfo.PropertyType;
+                    return SelectedMemberInfo.MemberType;
                 }
 
-                return type;
+                return CompileTimeType;
             }
         }
 
-        internal EquivalencyValidationContext CreateForNestedProperty(PropertyInfo nestedProperty,
-            PropertyInfo matchingProperty)
+        /// <summary>
+        /// Gets or sets a value indicating that the root of the graph is a collection so all type-specific options apply on 
+        /// the collection type and not on the root itself.
+        /// </summary>
+        public bool RootIsCollection { get; set; }
+
+        public override string ToString()
         {
-            object subject = nestedProperty.GetValue(Subject, null);
-            object expectation = matchingProperty.GetValue(Expectation, null);
-
-            return CreateNested(
-                nestedProperty,
-                subject,
-                expectation,
-                "property ",
-                nestedProperty.Name,
-                ".",
-                nestedProperty.PropertyType);
-        }
-
-        public EquivalencyValidationContext CreateForCollectionItem<T>(int index, T subject, object expectation)
-        {
-            return CreateNested(
-                PropertyInfo,
-                subject,
-                expectation,
-                "item",
-                "[" + index + "]",
-                string.Empty,
-                typeof(T));
-        }
-
-        public EquivalencyValidationContext CreateForDictionaryItem(object key, object subject, object expectation)
-        {
-            return CreateNested(
-                PropertyInfo,
-                subject,
-                expectation,
-                "pair",
-                "[" + key + "]",
-                string.Empty,
-                GetDictionaryValueType(subject, CompileTimeType));
-        }
-
-        private Type GetDictionaryValueType(object value, Type compileTimeType)
-        {
-            if (!ReferenceEquals(value, null))
-            {
-                return value.GetType();
-            }
-            else if (compileTimeType.Implements(typeof(IDictionary<,>)))
-            {
-                return compileTimeType.GetGenericArguments()[1];
-            }
-            else
-            {
-                return typeof(object);
-            }
-        }
-
-        private EquivalencyValidationContext CreateNested(
-            PropertyInfo subjectProperty, object subject, object expectation,
-            string memberType, string memberDescription, string separator,
-            Type compileTimeType)
-        {
-            string propertyPath = IsRoot ? memberType : PropertyDescription + separator;
-
-            return new EquivalencyValidationContext
-            {
-                PropertyInfo = subjectProperty,
-                Subject = subject,
-                Expectation = expectation,
-                PropertyPath = PropertyPath.Combine(memberDescription, separator),
-                PropertyDescription = propertyPath + memberDescription,
-                Reason = Reason,
-                ReasonArgs = ReasonArgs,
-                CompileTimeType = compileTimeType,
-            };
+            return string.Format("{{Path=\"{0}\", Subject={1}, Expectation={2}}}", SelectedMemberDescription, Subject, Expectation);
         }
     }
 }

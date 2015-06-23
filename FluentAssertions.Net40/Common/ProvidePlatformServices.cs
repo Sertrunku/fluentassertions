@@ -12,12 +12,12 @@ namespace FluentAssertions.Common
             get { return TestFrameworkProvider.Throw; }
         }
 
-        public Configuration Configuration
+        public IConfigurationStore ConfigurationStore
         {
-#if !__IOS__ && !ANDROID
-            get { return new Configuration(new AppSettingsConfigurationStore()); }
+#if ANDROID || __IOS__
+            get { return new NullConfigurationStore(); }
 #else
-            get { return null; }
+            get { return new AppSettingsConfigurationStore(); }
 #endif
         }
 

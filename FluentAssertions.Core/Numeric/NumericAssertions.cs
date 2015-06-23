@@ -44,10 +44,11 @@ namespace FluentAssertions.Numeric
             Execute.Assertion
                 .ForCondition(ReferenceEquals(Subject, expected) || ((!ReferenceEquals(Subject, null) && Subject.CompareTo(expected) == 0)))
                 .BecauseOf(because, reasonArgs)
-                .FailWith("Expected {0}{reason}, but found {1}.", expected, Subject);
+                .FailWith("Expected {context:value} to be {0}{reason}, but found {1}.", expected, Subject);
 
             return new AndConstraint<NumericAssertions<T>>(this);
         }
+
         /// <summary>
         /// Asserts that the integral number value is exactly the same as the <paramref name="expected"/> value.
         /// </summary>

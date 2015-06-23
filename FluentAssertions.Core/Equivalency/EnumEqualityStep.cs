@@ -1,14 +1,23 @@
+#region
+
+using System;
+using System.Globalization;
+
+#endregion
+
 namespace FluentAssertions.Equivalency
 {
-    internal class EnumEqualityStep : IEquivalencyStep
+    public class EnumEqualityStep : IEquivalencyStep
     {
         /// <summary>
         /// Gets a value indicating whether this step can handle the current subject and/or expectation.
         /// </summary>
-        public bool CanHandle(EquivalencyValidationContext context,
-            IEquivalencyAssertionOptions config)
+        public bool CanHandle(IEquivalencyValidationContext context, IEquivalencyAssertionOptions config)
         {
-            return context.RuntimeType != null && context.RuntimeType.IsEnum;
+            Type subjectType = config.GetSubjectType(context);
+
+            return ((subjectType != null) && subjectType.IsEnum) ||
+                   ((context.Expectation != null) && context.Expectation.GetType().IsEnum);
         }
 
         /// <summary>
@@ -21,10 +30,26 @@ namespace FluentAssertions.Equivalency
         /// <remarks>
         /// May throw when preconditions are not met or if it detects mismatching data.
         /// </remarks>
-        public bool Handle(EquivalencyValidationContext context, IEquivalencyValidator parent,
+        public bool Handle(IEquivalencyValidationContext context, IEquivalencyValidator parent,
             IEquivalencyAssertionOptions config)
         {
-            context.Subject.Should().Be(context.Expectation, context.Reason, context.ReasonArgs);
+            switch (config.EnumEquivalencyHandling)
+            {
+                case EnumEquivalencyHandling.ByValue:
+                    long subjectsUnderlyingValue = Convert.ToInt64(context.Subject);
+                    long expectationsUnderlyingValue = Convert.ToInt64(context.Expectation);
+
+                    subjectsUnderlyingValue.Should().Be(expectationsUnderlyingValue, context.Reason, context.ReasonArgs);
+                    break;
+
+                case EnumEquivalencyHandling.ByName:
+                    context.Subject.ToString().Should().Be(context.Expectation.ToString(), context.Reason, context.ReasonArgs);
+                    break;
+
+                default:
+                    throw new InvalidOperationException(string.Format("Don't know how to handle {0}",
+                        config.EnumEquivalencyHandling));
+            }
 
             return true;
         }

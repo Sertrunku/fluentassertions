@@ -828,7 +828,7 @@ namespace FluentAssertions.Specs
             act.ShouldThrow<AssertFailedException>().WithMessage("Expected*4*3*.");
         }
 
-        private class MyClass
+        public class MyClass
         {
             public int SomeProperty { get; set; }
 
@@ -839,9 +839,21 @@ namespace FluentAssertions.Specs
 
             public override bool Equals(object obj)
             {
-                if (ReferenceEquals(null, obj)) return false;
-                if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != this.GetType()) return false;
+                if (ReferenceEquals(null, obj))
+                {
+                    return false;
+                }
+
+                if (ReferenceEquals(this, obj))
+                {
+                    return true;
+                }
+
+                if (obj.GetType() != this.GetType())
+                {
+                    return false;
+                }
+
                 return Equals((MyClass) obj);
             }
 
