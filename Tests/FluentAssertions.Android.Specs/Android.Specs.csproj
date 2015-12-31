@@ -130,7 +130,7 @@
       <Project>{d9cccaf6-ff9e-4688-9d96-645e27616ac4}</Project>
       <Name>AssemblyB</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FluentAssertions.Android\Android.csproj">
+    <ProjectReference Include="..\..\Src\FluentAssertions.Android\Android.csproj">
       <Project>{F2AA2B81-431F-4F5C-A662-BC75358BE5CC}</Project>
       <Name>Android</Name>
     </ProjectReference>

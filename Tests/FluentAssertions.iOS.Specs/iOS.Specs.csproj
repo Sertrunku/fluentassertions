@@ -190,7 +190,7 @@
       <Project>{d9cccaf6-ff9e-4688-9d96-645e27616ac4}</Project>
       <Name>AssemblyB</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FluentAssertions.iOS\iOS.csproj">
+    <ProjectReference Include="..\..\Src\FluentAssertions.iOS\iOS.csproj">
       <Project>{841fcccf-6284-4868-96ee-23a92dbfd8f8}</Project>
       <Name>iOS</Name>
     </ProjectReference>
