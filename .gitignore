@@ -8,8 +8,13 @@
 *.sln.ide
 .vs/
 
-# Build results
 
+project.lock.json
+*.nuget.props
+*.nuget.targets
+
+# Build results
+Artifacts/
 [Dd]ebug/
 [Rr]elease/
 x64/
@@ -75,8 +80,8 @@ _TeamCity*
 *.dotCover
 
 # NCrunch
-*.ncrunch*
 .*crunch*.local.xml
+_NCrunch_FluentAssertions/*
 
 # Installshield output folder
 [Ee]xpress/
