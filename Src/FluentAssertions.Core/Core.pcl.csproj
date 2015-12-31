@@ -65,9 +65,9 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\StyleCop.MSBuild.4.7.49.0\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.49.0\build\StyleCop.MSBuild.Targets')" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)\Artifacts\Lib\portable-monotouch+monoandroid+xamarin.ios\*.*" "$(SolutionDir)\Artifacts\Lib\monotouch\" /y
-xcopy "$(SolutionDir)\Artifacts\Lib\portable-monotouch+monoandroid+xamarin.ios\*.*" "$(SolutionDir)\Artifacts\Lib\monoandroid\" /y  
-xcopy "$(SolutionDir)\Artifacts\Lib\portable-monotouch+monoandroid+xamarin.ios\*.*" "$(SolutionDir)\Artifacts\Lib\xamarin.ios\" /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)*.*" "$(SolutionDir)\Artifacts\Lib\monotouch\" /y
+xcopy "$(TargetDir)*.*" "$(SolutionDir)\Artifacts\Lib\monoandroid\" /y  
+xcopy "$(TargetDir)*.*" "$(SolutionDir)\Artifacts\Lib\xamarin.ios\" /y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
