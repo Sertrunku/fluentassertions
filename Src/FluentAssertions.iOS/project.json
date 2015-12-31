@@ -1,0 +1,9 @@
+{
+    "dependencies": {
+        "FluentAssertions": "4.1.1"
+    },
+    "frameworks": {
+        "MonoTouch,Version=v1.0": { }
+    },
+    "supports": { }
+}

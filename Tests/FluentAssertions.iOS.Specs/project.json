@@ -1,0 +1,14 @@
+{
+    "dependencies": {
+        "Autofac": "3.5.2",
+        "Chill": "2.2.0-beta0001",
+        "Chill.Autofac": "2.2.0-beta0001"
+    },
+    "frameworks": {
+        "MonoTouch,Version=v1.0": { }
+    },
+    "supports": { },    
+    "runtimes": {
+        "win": { }
+    }
+}
