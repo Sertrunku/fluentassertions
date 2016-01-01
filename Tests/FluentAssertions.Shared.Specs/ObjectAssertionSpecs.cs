@@ -1,8 +1,4 @@
-﻿#if ANDROID
-extern alias mscorlib;
-using SerializableAttribute = mscorlib::System.SerializableAttribute;
-#endif
-
+﻿
 using System;
 using System.Runtime.Serialization;
 using System.Xml;

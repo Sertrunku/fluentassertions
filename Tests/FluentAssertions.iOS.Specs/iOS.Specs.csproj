@@ -12,6 +12,7 @@
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>FluentAssertionsiOSSpecs</AssemblyName>
     <CopyNuGetImplementations>true</CopyNuGetImplementations>
+    <IncludeFrameworkReferencesFromNuGet>false</IncludeFrameworkReferencesFromNuGet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>

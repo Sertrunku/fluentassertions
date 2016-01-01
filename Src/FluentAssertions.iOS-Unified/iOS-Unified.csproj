@@ -11,6 +11,7 @@
     <RootNamespace>FluentAssertions</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>FluentAssertions</AssemblyName>
+    <IncludeFrameworkReferencesFromNuGet>false</IncludeFrameworkReferencesFromNuGet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
