@@ -29,7 +29,7 @@ namespace FluentAssertions.Specs
     [TestClass]
     public class EventAssertionSpecs
     {
-        #if !WINRT && !SILVERLIGHT && !WINDOWS_PHONE_APP && !CORE_CLR
+        #if !WINRT && !SILVERLIGHT && !WINDOWS_PHONE_APP && !CORE_CLR && !__IOS__ && !__ANDROID__
 
         #region Should(Not)Raise
 
@@ -666,7 +666,7 @@ namespace FluentAssertions.Specs
             referenceToSubject.IsAlive.Should().BeFalse();
         }
 
-#if NET40 || NET45
+#if NET40 || NET45 && !__ANDROID__ && !__IOS__
         [TestMethod]
         public void When_the_fallback_assertion_exception_crosses_appdomain_boundaries_it_should_be_serializable()
         {

@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
-    <DefineConstants>DEBUG;__IOS__;__MOBILE__;NUNIT;</DefineConstants>
+    <DefineConstants>DEBUG;__MOBILE__;__IOS__;__IOS__;__MOBILE__;NUNIT;NET45</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchLink>None</MtouchLink>
-    <DefineConstants>__IOS__;__MOBILE__;NUNIT;</DefineConstants>
+    <DefineConstants>__MOBILE__;__IOS__;__IOS__;__MOBILE__;NUNIT;NET45</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -113,10 +113,10 @@
     <AssemblyOriginatorKeyFile>..\FluentAssertions.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhoneSimulator'">
-    <DefineConstants>__IOS__;__MOBILE__;NUNIT;</DefineConstants>
+    <DefineConstants>__MOBILE__;__IOS__;__IOS__;__MOBILE__;NUNIT;NET45</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppStore|iPhoneSimulator'">
-    <DefineConstants>__IOS__;__MOBILE__;NUNIT;</DefineConstants>
+    <DefineConstants>__MOBILE__;__IOS__;__IOS__;__MOBILE__;NUNIT;NET45</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\FluentAssertions.Net45.Specs\AsyncFunctionExceptionAssertionSpecs.cs">

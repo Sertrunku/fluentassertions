@@ -2,7 +2,8 @@
     "dependencies": {
         "Autofac": "3.5.2",
         "Chill": "2.2.0-beta0001",
-        "Chill.Autofac": "2.2.0-beta0001"
+        "Chill.Autofac": "2.2.0-beta0001",
+        "Microsoft.Bcl": "1.1.10"
     },
     "frameworks": {
         "MonoAndroid,Version=v6.0": { }
