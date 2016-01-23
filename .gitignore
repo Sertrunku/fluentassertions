@@ -160,7 +160,7 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
-Package/Lib
+Src/Package/Lib
 *.nupkg
 *.zip
 packages/*
