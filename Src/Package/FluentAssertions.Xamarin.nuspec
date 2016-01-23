@@ -18,13 +18,13 @@
     <projectUrl>https://github.com/onovotny/fluentassertions</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>NUnit TDD BDD Fluent Xamarin MonoTouch MonoAndroid iOS Android Xamarin.iOS</tags>
-    <copyright>© Oren Novotny 2015</copyright>
+    <copyright>© Oren Novotny 2016</copyright>
     <releaseNotes>
       See https://github.com/dennisdoomen/fluentassertions/releases/
     </releaseNotes>
     <dependencies>
       <group>
-        <dependency id="FluentAssertions" version="[4.1.1,4.2)" />
+        <dependency id="FluentAssertions" version="[4.2.1,4.3)" />
       </group>
     </dependencies>
   </metadata>

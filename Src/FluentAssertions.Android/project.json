@@ -1,9 +1,9 @@
-{
-    "dependencies": {
-        "FluentAssertions": "4.1.1"
-    },
-    "frameworks": {
-        "MonoAndroid,Version=v6.0": { }
-    },
-    "supports": { }
+﻿{
+  "dependencies": {
+    "FluentAssertions": "4.2.1"
+  },
+  "frameworks": {
+    "MonoAndroid,Version=v6.0": {}
+  },
+  "supports": {}
 }

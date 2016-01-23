@@ -17,6 +17,7 @@ namespace FluentAssertions.Execution
 #elif __IOS__ || ANDROID
             {"nunit-lite", new NUnitLiteTestFramework()},
 #endif
+             { "fallback", new FallbackTestFramework() }
         };
 
         private static ITestFramework testFramework;
