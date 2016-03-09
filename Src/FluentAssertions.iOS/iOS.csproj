@@ -52,6 +52,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\FluentAssertions.iOS-Unified\Execution\NUnitLiteTestFramework.cs">
+      <Link>Execution\NUnitLiteTestFramework.cs</Link>
+    </Compile>
     <Compile Include="..\FluentAssertions.Net40\Common\DefaultReflectionProvider.cs">
       <Link>Common\DefaultReflectionProvider.cs</Link>
     </Compile>
@@ -73,7 +76,6 @@
     <Compile Include="..\FluentAssertions.WinRT\Execution\TestFrameworkProvider.cs">
       <Link>Execution\TestFrameworkProvider.cs</Link>
     </Compile>
-    <Compile Include="Execution\NUnitLiteTestFramework.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
