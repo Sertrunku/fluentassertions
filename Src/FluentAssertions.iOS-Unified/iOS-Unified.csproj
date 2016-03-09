@@ -44,6 +44,28 @@
     <AssemblyOriginatorKeyFile>..\FluentAssertions.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\FluentAssertions.Net40\Common\DefaultReflectionProvider.cs">
+      <Link>Common\DefaultReflectionProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentAssertions.Net40\Common\ProvidePlatformServices.cs">
+      <Link>Common\ProvidePlatformServices.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentAssertions.Net40\EventSourceExtensions.cs">
+      <Link>EventSourceExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentAssertions.Net40\ObjectAssertionsExtensions.cs">
+      <Link>ObjectAssertionsExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentAssertions.Net45\Execution\XUnit2TestFramework.cs">
+      <Link>Execution\XUnit2TestFramework.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentAssertions.WinRT\Execution\NUnitPclTestFramework.cs">
+      <Link>Execution\NUnitPclTestFramework.cs</Link>
+    </Compile>
+    <Compile Include="..\FluentAssertions.WinRT\Execution\TestFrameworkProvider.cs">
+      <Link>Execution\TestFrameworkProvider.cs</Link>
+    </Compile>
+    <Compile Include="Execution\NUnitLiteTestFramework.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
